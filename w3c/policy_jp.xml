@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<POLICY name="danmaq" discuri="http://danmaq.com/?cat=28" opturi="http://danmaq.com/?cat=28">
+	<EXPIRY max-age="864000" />
+	<ENTITY>
+		<DATA-GROUP>
+			<DATA ref="#business.name">DAYS PRODUCTION (Shuhei Nomura)</DATA>
+			<DATA ref="#business.contact-info.postal.street">Royal-heights No.2 903, 5-11-3, Minami-senjyu</DATA>
+			<DATA ref="#business.contact-info.postal.city">Arakawa-ku</DATA>
+			<DATA ref="#business.contact-info.postal.stateprov">Tokyo</DATA>
+			<DATA ref="#business.contact-info.postal.postalcode">116-0003</DATA>
+			<DATA ref="#business.contact-info.postal.country">Japan</DATA>
+			<DATA ref="#business.contact-info.telecom.telephone.intcode">81</DATA>
+			<DATA ref="#business.contact-info.telecom.telephone.loccode">03</DATA>
+			<DATA ref="#business.contact-info.telecom.telephone.number">68066843</DATA>
+			<DATA ref="#business.contact-info.online.email">info@danmaq.com</DATA>
+			<DATA ref="#business.contact-info.online.uri">http://danmaq.com/</DATA>
+		</DATA-GROUP>
+	</ENTITY>
+	<ACCESS><none /></ACCESS>
+	<DISPUTES-GROUP>
+		<DISPUTES resolution-type="service" service="http://danmaq.com/" short-description="http://danmaq.com/category/about/web/policy">
+			<REMEDIES><law /></REMEDIES>
+		</DISPUTES>
+	</DISPUTES-GROUP>
+	<STATEMENT>
+		<PURPOSE>
+			<current />
+			<admin />
+			<develop />
+			<pseudo-analysis />
+			<historical />
+		</PURPOSE>
+		<RECIPIENT>
+			<ours />
+		</RECIPIENT>
+		<RETENTION><indefinitely /></RETENTION>
+		<DATA-GROUP>
+			<DATA ref="#dynamic.miscdata">
+				<CATEGORIES><online /></CATEGORIES>
+			</DATA>
+			<DATA ref="#dynamic.miscdata">
+				<CATEGORIES><uniqueid /></CATEGORIES>
+			</DATA>
+			<DATA ref="#dynamic.miscdata">
+				<CATEGORIES><computer /></CATEGORIES>
+			</DATA>
+			<DATA ref="#dynamic.miscdata">
+				<CATEGORIES><interactive /></CATEGORIES>
+			</DATA>
+			<DATA ref="#dynamic.miscdata">
+				<CATEGORIES><content /></CATEGORIES>
+			</DATA>
+			<DATA ref="#dynamic.miscdata">
+				<CATEGORIES><state /></CATEGORIES>
+			</DATA>
+			<DATA ref="#dynamic.cookies">
+				<CATEGORIES>
+					<uniqueid />
+					<navigation />
+					<interactive />
+				</CATEGORIES>
+			</DATA>
+		</DATA-GROUP>
+	</STATEMENT>
+</POLICY>
