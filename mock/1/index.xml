@@ -1,7 +1,3 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<?xml-stylesheet type="text/xsl" href="default.xsl" ?>
-<body xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:noNamespaceSchemaLocation="default.xsd">
-    <query text="Unity落ちた" />
-	<message result="false" text="認証失敗" />
-</body>
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="default.xsl"?>
+<body query="Unity落ちた" result="true" message="認証失敗" />

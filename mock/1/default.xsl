@@ -34,14 +34,38 @@
 					<h1>#Unity落ちた</h1>
 				</header>
 				<section>
-					<form method="post" action="./">
+					<form method="post" action="#">
 						<fieldset>
-							<p>
-								<input value="Unity落ちた" /> - http://dmq.cm/unitycrash #Unity落ちた
+							<xsl:if test="@message">
+								<p>
+									<xsl:attribute name="class">
+										<xsl:choose>
+											<xsl:when test="@result = 'true'">info</xsl:when>
+											<xsl:otherwise>warn</xsl:otherwise>
+										</xsl:choose>
+									</xsl:attribute>
+									<xsl:value-of select="@message" />
+								</p>
+							</xsl:if>
+							<p class="textfield">
+								<input name="message" id="message" type="text" maxlength="99">
+									<xsl:attribute name="value"><xsl:value-of select="@query" /></xsl:attribute>
+								</input>
+								<label for="message"> http://dmq.cm/unitycrash #Unity落ちた</label>
 							</p>
 							<input type="submit" value="ツイート" />
 						</fieldset>
 					</form>
+				</section>
+				<section>
+					<h2>作った経緯</h2>
+					<ul>
+						<li>Unity落ちた</li>
+						<li>Unity落ちた</li>
+						<li>Unity落ちた</li>
+						<li>Unity落ちた</li>
+						<li>Unity落ちた</li>
+					</ul>
 				</section>
 				<section>
 					<h2>TODO</h2>
@@ -61,9 +85,6 @@
 						<li>2014-05-30 サービス開始</li>
 					</ul>
 				</section>
-<!--
-				<xsl:apply-templates select="user|search" />
- -->
 				<footer>
 					<hr />
 					<address>by <a href="http://danmaq.com/">danmaq</a></address>
