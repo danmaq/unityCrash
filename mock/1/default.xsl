@@ -1,10 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	xmlns:xhtml="http://www.w3.org/1999/xhtml"
+	xmlns:local="local:local"
 	xmlns="http://www.w3.org/1999/xhtml"
-	exclude-result-prefixes="xhtml">
+	exclude-result-prefixes="local">
 	<xsl:output method="xml" encoding="UTF-8" indent="yes" media-type="application/xhtml+xml" />
+
+	<xsl:param name="sourceLanguage">
+		<xsl:value-of select="/body/@xml:lang" />
+	</xsl:param>
+
+	<xsl:param name="language">
+		<xsl:value-of select="/body/@xml:lang" />
+	</xsl:param>
+
+	<!-- <xsl:param name="language" select="'zh'" /> -->
+
+	<local:resources>
+		<local:resource place="title" lang="ja">#Unity落ちた</local:resource>
+		<local:resource place="tweet" lang="ja">ツイート</local:resource>
+		<local:resource place="headCause" lang="ja">作った経緯</local:resource>
+		<local:resource place="bodyCause" lang="ja">Unity落ちた</local:resource>
+		<local:resource place="idea" lang="ja">TODO</local:resource>
+		<local:resource place="history" lang="ja">更新履歴</local:resource>
+
+		<local:resource place="title" lang="en">#Unity3DCrashed</local:resource>
+		<local:resource place="tweet" lang="en">Tweet now</local:resource>
+		<local:resource place="headCause" lang="en">Cause of produced</local:resource>
+		<local:resource place="bodyCause" lang="en">Crashed Unity3D.</local:resource>
+		<local:resource place="idea" lang="en">Idea [Only Japanese]</local:resource>
+		<local:resource place="history" lang="en">History [Only Japanese]</local:resource>
+
+		<local:resource place="title" lang="zh">#Unity3DCrashed</local:resource>
+		<local:resource place="tweet" lang="zh">咕噥</local:resource>
+		<local:resource place="headCause" lang="zh">產生的原因</local:resource>
+		<local:resource place="bodyCause" lang="zh">Crashed Unity3D.</local:resource>
+		<local:resource place="idea" lang="zh">計劃 [日語]</local:resource>
+		<local:resource place="history" lang="zh">歷史 [日語]</local:resource>
+	</local:resources>
+
+	<xsl:param name="title">
+		<xsl:value-of select="$resources/local:resource[@place = 'title' and @lang = $language]" />
+	</xsl:param>
+
+	<xsl:param name="cause">
+		<xsl:value-of select="$resources/local:resource[@place = 'bodyCause' and @lang = $language]" />
+	</xsl:param>
+
+	<xsl:variable name="resources" select="document('')/*/local:resources" />
 
 	<!-- メイン。 -->
 	<xsl:template match="/body">
@@ -15,29 +58,38 @@
 </xsl:text>
 		<!-- 出力のインデントが乱れるため、意図して改行しています。 -->
 
-		<html xml:lang="ja">
+		<html>
+			<xsl:attribute name="xml:lang">
+				<xsl:value-of select="$language" />
+			</xsl:attribute>
 			<head>
 				<meta charset="UTF-8" />
 				<xsl:if test="contains(@ua, ' IE ') or contains(@ua, ' MSIE ')">
 					<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 				</xsl:if>
-				<meta name="application-name" content="#Unity落ちた" />
+				<meta name="application-name">
+					<xsl:attribute name="content">
+						<xsl:value-of select="$title" />
+					</xsl:attribute>
+				</meta>
 				<meta name="author" content="danmaq" />
 				<meta name="viewport" content="width=789" />
-				<title>#Unity落ちた</title>
+				<title><xsl:value-of select="$title" /></title>
 				<link href="default.css" rel="StyleSheet" />
 				<link href="http://twitter.com/danmaq" rel="Author" />
-				<xsl:comment> 評価中 </xsl:comment>
 			</head>
 			<body>
 				<header>
-					<h1>#Unity落ちた</h1>
+					<h1><xsl:value-of select="$title" /></h1>
 				</header>
 				<section>
 					<form method="post" action="#">
 						<fieldset>
 							<xsl:if test="@message">
 								<p>
+									<xsl:attribute name="xml:lang">
+										<xsl:value-of select="$sourceLanguage" />
+									</xsl:attribute>
 									<xsl:attribute name="class">
 										<xsl:choose>
 											<xsl:when test="@result = 'true'">info</xsl:when>
@@ -49,28 +101,34 @@
 							</xsl:if>
 							<p class="textfield">
 								<input name="message" id="message" type="text" maxlength="99">
+									<xsl:attribute name="xml:lang">
+										<xsl:value-of select="$sourceLanguage" />
+									</xsl:attribute>
 									<xsl:attribute name="value"><xsl:value-of select="@query" /></xsl:attribute>
 								</input>
-								<label for="message"> http://dmq.cm/unitycrash #Unity落ちた</label>
+								<label for="message"> http://dmq.cm/unitycrash <xsl:value-of select="$title" /></label>
 							</p>
-							<input type="submit" value="ツイート" />
+							<input type="submit">
+								<xsl:attribute name="value">
+									<xsl:value-of select="$resources/local:resource[@place = 'tweet' and @lang = $language]" />
+								</xsl:attribute>
+							</input>
 						</fieldset>
 					</form>
 				</section>
 				<section>
-					<h2>作った経緯</h2>
+					<h2><xsl:value-of select="$resources/local:resource[@place = 'headCause' and @lang = $language]" /></h2>
 					<ul>
-						<li>Unity落ちた</li>
-						<li>Unity落ちた</li>
-						<li>Unity落ちた</li>
-						<li>Unity落ちた</li>
-						<li>Unity落ちた</li>
+						<li><xsl:value-of select="$cause" /></li>
+						<li><xsl:value-of select="$cause" /></li>
+						<li><xsl:value-of select="$cause" /></li>
+						<li><xsl:value-of select="$cause" /></li>
+						<li><xsl:value-of select="$cause" /></li>
 					</ul>
 				</section>
 				<section>
-					<h2>TODO</h2>
-					<ul>
-						<li>ワンクリックでツイート(今は2クリック)</li>
+					<h2><xsl:value-of select="$resources/local:resource[@place = 'idea' and @lang = $language]" /></h2>
+					<ul xml:lang="ja">
 						<li>落ちた回数・生き延びた時間</li>
 						<li>デザインとかもうちょっと凝ってみる</li>
 						<li>デスクトップ常駐アプリに</li>
@@ -78,8 +136,8 @@
 					</ul>
 				</section>
 				<section>
-				<h2>HISTORY</h2>
-					<ul>
+				<h2><xsl:value-of select="$resources/local:resource[@place = 'history' and @lang = $language]" /></h2>
+					<ul xml:lang="ja">
 						<li>2014-11-11 大手術開始</li>
 						<li>2014-11-04 ツイートボタンの動作がおかしいので最新のスクリプトに置き換えた。が……駄目っ……！</li>
 						<li>2014-05-30 サービス開始</li>
@@ -87,7 +145,7 @@
 				</section>
 				<footer>
 					<hr />
-					<address>by <a href="http://danmaq.com/">danmaq</a></address>
+					<address xml:lang="en">by <a href="https://twitter.com/danmaq" hreflang="ja-JP">@danmaq</a><br />Copyright © 2014 <a href="http://danmaq.com/" hreflang="ja-JP">danmaq</a> All rights reserved.</address>
 				</footer>
 			</body>
 		</html>
