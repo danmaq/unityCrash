@@ -15,21 +15,21 @@ interface iState
 	/**
 	 * コンテキストにこの状態が適用された直後に呼び出されます。
 	 *
-	 * @param object $context コンテキスト。
+	 * @param iContext $context コンテキスト。
 	 */
-	public function setup($context);
+	public function setup(iContext $context);
 
 	/**
 	 * コンテキストに状態が適用されている間、反復して呼び出されます。
 	 *
-	 * @param object $context コンテキスト。
+	 * @param iContext $context コンテキスト。
 	 */
-	public function loop($context);
+	public function loop(iContext $context);
 
 	/**
 	 * コンテキストが別の状態へと遷移される直前に呼び出されます。
 	 *
-	 * @param object $context コンテキスト。
+	 * @param iContext $context コンテキスト。
 	 */
-	public function teardown($context);
+	public function teardown(iContext $context);
 }

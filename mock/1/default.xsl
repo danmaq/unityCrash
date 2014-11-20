@@ -73,80 +73,95 @@
 					</xsl:attribute>
 				</meta>
 				<meta name="author" content="danmaq" />
-				<meta name="viewport" content="width=789" />
+				<meta name="viewport" content="width=780" />
 				<title><xsl:value-of select="$title" /></title>
 				<link href="default.css" rel="StyleSheet" />
+				<link href="favicon.ico" rel="icon" type="image/vnd.microsoft.icon" />
+				<link href="favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon" />
 				<link href="http://twitter.com/danmaq" rel="Author" />
 			</head>
 			<body>
-				<header>
-					<h1><xsl:value-of select="$title" /></h1>
-				</header>
-				<section>
-					<form method="post" action="#">
-						<fieldset>
-							<xsl:if test="@message">
-								<p>
-									<xsl:attribute name="xml:lang">
-										<xsl:value-of select="$sourceLanguage" />
-									</xsl:attribute>
-									<xsl:attribute name="class">
-										<xsl:choose>
-											<xsl:when test="@result = 'true'">info</xsl:when>
-											<xsl:otherwise>warn</xsl:otherwise>
-										</xsl:choose>
-									</xsl:attribute>
-									<xsl:value-of select="@message" />
+				<div class="bg">&#160;</div>
+				<div class="main">
+					<header>
+						<h1><xsl:value-of select="$title" /></h1>
+					</header>
+					<section>
+						<form method="post" action="#">
+							<fieldset>
+								<xsl:if test="@message">
+									<p>
+										<xsl:attribute name="xml:lang">
+											<xsl:value-of select="$sourceLanguage" />
+										</xsl:attribute>
+										<xsl:attribute name="class">
+											<xsl:choose>
+												<xsl:when test="@result = 'true'">info</xsl:when>
+												<xsl:otherwise>warn</xsl:otherwise>
+											</xsl:choose>
+										</xsl:attribute>
+										<xsl:value-of select="@message" />
+									</p>
+								</xsl:if>
+								<p class="textfield">
+									<input name="message" id="message" type="text" maxlength="89">
+										<xsl:attribute name="xml:lang">
+											<xsl:value-of select="$sourceLanguage" />
+										</xsl:attribute>
+										<xsl:attribute name="value"><xsl:value-of select="@query" /></xsl:attribute>
+									</input>
+									<label for="message"> http://dmq.cm/unitycrash <xsl:value-of select="$title" /></label>
 								</p>
-							</xsl:if>
-							<p class="textfield">
-								<input name="message" id="message" type="text" maxlength="99">
-									<xsl:attribute name="xml:lang">
-										<xsl:value-of select="$sourceLanguage" />
-									</xsl:attribute>
-									<xsl:attribute name="value"><xsl:value-of select="@query" /></xsl:attribute>
-								</input>
-								<label for="message"> http://dmq.cm/unitycrash <xsl:value-of select="$title" /></label>
-							</p>
-							<input type="submit">
-								<xsl:attribute name="value">
-									<xsl:value-of select="$resources/local:resource[@place = 'tweet' and @lang = $language]" />
-								</xsl:attribute>
-							</input>
-						</fieldset>
-					</form>
-				</section>
-				<section>
-					<h2><xsl:value-of select="$resources/local:resource[@place = 'headCause' and @lang = $language]" /></h2>
-					<ul>
-						<li><xsl:value-of select="$cause" /></li>
-						<li><xsl:value-of select="$cause" /></li>
-						<li><xsl:value-of select="$cause" /></li>
-						<li><xsl:value-of select="$cause" /></li>
-						<li><xsl:value-of select="$cause" /></li>
-					</ul>
-				</section>
-				<section>
-					<h2><xsl:value-of select="$resources/local:resource[@place = 'idea' and @lang = $language]" /></h2>
-					<ul xml:lang="ja">
-						<li>落ちた回数・生き延びた時間</li>
-						<li>デザインとかもうちょっと凝ってみる</li>
-						<li>デスクトップ常駐アプリに</li>
-						<li>スマホアプリに</li>
-					</ul>
-				</section>
-				<section>
-				<h2><xsl:value-of select="$resources/local:resource[@place = 'history' and @lang = $language]" /></h2>
-					<ul xml:lang="ja">
-						<li>2014-11-11 大手術開始</li>
-						<li>2014-11-04 ツイートボタンの動作がおかしいので最新のスクリプトに置き換えた。が……駄目っ……！</li>
-						<li>2014-05-30 サービス開始</li>
-					</ul>
-				</section>
-				<footer>
-					<hr />
-					<address xml:lang="en">by <a href="https://twitter.com/danmaq" hreflang="ja-JP">@danmaq</a><br />Copyright © 2014 <a href="http://danmaq.com/" hreflang="ja-JP">danmaq</a> All rights reserved.</address>
-				</footer>
+								<p>
+									<input type="submit">
+										<xsl:attribute name="value">
+											<xsl:value-of select="$resources/local:resource[@place = 'tweet' and @lang = $language]" />
+										</xsl:attribute>
+									</input>
+								<!--	<img src="ads.png" width="728" height="90" /> -->
+									<script async="async" src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+									<!-- ください -->
+									<ins class="adsbygoogle"
+									     style="display:inline-block;width:728px;height:90px"
+									     data-ad-client="ca-pub-1989949419175195"
+									     data-ad-slot="1743217019">&#160;</ins>
+									<script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+								</p>
+							</fieldset>
+						</form>
+					</section>
+					<section>
+						<h2><xsl:value-of select="$resources/local:resource[@place = 'headCause' and @lang = $language]" /></h2>
+						<ul>
+							<li><xsl:value-of select="$cause" /></li>
+							<li><xsl:value-of select="$cause" /></li>
+							<li><xsl:value-of select="$cause" /></li>
+							<li><xsl:value-of select="$cause" /></li>
+							<li><xsl:value-of select="$cause" /></li>
+						</ul>
+					</section>
+					<section>
+						<h2><xsl:value-of select="$resources/local:resource[@place = 'idea' and @lang = $language]" /></h2>
+						<ul xml:lang="ja">
+							<li>落ちた回数・生き延びた時間</li>
+							<li>デザインとかもうちょっと凝ってみる</li>
+							<li>デスクトップ常駐アプリに</li>
+							<li>スマホアプリに</li>
+						</ul>
+					</section>
+					<section>
+					<h2><xsl:value-of select="$resources/local:resource[@place = 'history' and @lang = $language]" /></h2>
+						<ul xml:lang="ja">
+							<li>2014-11-11 大手術開始</li>
+							<li>2014-11-04 ツイートボタンの動作がおかしいので最新のスクリプトに置き換えた。が……駄目っ……！</li>
+							<li>2014-05-30 サービス開始</li>
+						</ul>
+					</section>
+					<footer>
+						<hr />
+						<address xml:lang="en">by <a href="https://twitter.com/danmaq" hreflang="ja-JP">@danmaq</a><br />Copyright © 2014 <a href="http://danmaq.com/" hreflang="ja-JP">danmaq</a> All rights reserved.</address>
+					</footer>
+				</div>
 			</body>
 		</html>
 	</xsl:template>
