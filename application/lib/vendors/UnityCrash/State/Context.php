@@ -4,19 +4,30 @@ namespace UnityCrash\State;
 
 use SplObjectStorage;
 
-class Context implements iContext
+class Context implements IContext
 {
 	/** 汎用的に使用できる値のストレージ。 */
-	private $storage = array();
+	private $_storage = array();
 	
 	/** 前回有効だった状態。 */
-	private $previousState;
+	private $_previousState;
 	
 	/** 現在の状態。 */
-	private $currentState;
+	private $_currentState;
 	
 	/** 次に遷移すべき状態。 */
-	private $nextState;
+	private $_nextState;
+
+	/**
+	 * Constructor.
+	 *
+	 * @param IState $defaultState 初期の状態。
+	 * 省略時はEmptyStateが初期状態となります。
+	 */
+	public function __construct(IState $defaultState = null)
+	{
+		
+	}
 
 	/**
 	 * 汎用的に使用できる連想配列を取得します。
@@ -30,7 +41,7 @@ class Context implements iContext
 	/**
 	 * 前回有効だった状態を取得します。
 	 *
-	 * @return iState 状態。
+	 * @return IState 状態。
 	 */
 	public function getPreviousState()
 	{
@@ -39,7 +50,7 @@ class Context implements iContext
 	/**
 	 * 現在の状態を取得します。
 	 *
-	 * @return iState 状態。
+	 * @return IState 状態。
 	 */
 	public function getCurrentState()
 	{
@@ -48,7 +59,7 @@ class Context implements iContext
 	/**
 	 * 次に遷移すべき状態を取得します。
 	 *
-	 * @return iState 状態。
+	 * @return IState 状態。
 	 */
 	public function getNextState()
 	{
@@ -57,9 +68,9 @@ class Context implements iContext
 	/**
 	 * 次に遷移すべき状態を設定します。
 	 *
-	 * @param iState $state 状態。
+	 * @param IState $state 状態。
 	 */
-	public function setNextState(iState $state = null)
+	public function setNextState(IState $state = null)
 	{
 	}
 
@@ -92,24 +103,6 @@ class Context implements iContext
 	 * 空の状態を設定し、値をリセットして状態を終了します。
 	 */
 	public function terminate()
-	{
-	}
-
-	/**
-	 * コンテキストにこの状態が適用された直後に呼び出されます。
-	 *
-	 * @param object $context コンテキスト。
-	 */
-	public function setup(Context $context)
-	{
-	}
-
-	/**
-	 * コンテキストが別の状態へと遷移される直前に呼び出されます。
-	 *
-	 * @param object $context コンテキスト。
-	 */
-	public function teardown(Context $context)
 	{
 	}
 }

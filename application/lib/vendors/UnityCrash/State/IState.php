@@ -9,7 +9,7 @@ namespace UnityCrash\State;
  * @package UnityCrash\State
  * @author Mc at danmaq
  */
-interface iState
+interface IState
 {
 
 	/**

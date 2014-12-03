@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="UnityCrash" default="build" basedir="." description="Tweet UnityCrash!">
+	<property name="basedir" value="${phing.dir}" />
+	<property name="appdir"  value="${basedir}/application" />
+	<property name="datadir" value="${basedir}/data" />
+	<property name="logdir"  value="${datadir}/build/logs" />
+	<target name="build" depends="clean, prepare, phpcs, phpmd, phpdoc, phpunit">
+	</target>
+	<target name="clean">
+		<delete dir="${logdir}" quiet="true" />
+		<delete dir="${datadir}/build/coverage" quiet="true" />
+		<delete dir="${datadir}/build/phpdoc" quiet="true" />
+	</target>
+	<target name="prepare">
+		<mkdir dir="${logdir}" />
+		<mkdir dir="${datadir}/build/coverage" />
+		<mkdir dir="${datadir}/build/phpdoc" />
+	</target>
+	<target name="phpcs">
+		<phpcodesniffer standard="phpcs/danmaq"
+			 file="${appdir}/"
+			 encoding="utf-8"
+			 tabWidth="4"
+			 allowedFileExtensions="php"
+			 ignorePatterns="SplClassLoader.php">
+			<formatter type="checkstyle" outfile="${logdir}/phpcs.xml" />
+			<formatter type="full" outfile="${logdir}/phpcs.txt" />
+		</phpcodesniffer>
+	</target>
+	<target name="phpmd">
+		<exec dir="${basedir}" executable="phpmd" output="${logdir}/phpmd.log">
+			<arg line="${appdir}" />
+			<arg line="xml" />
+			<arg line="codesize,design,naming,unusedcode" />
+			<arg line="--reportfile ${logdir}/phpmd.xml" />
+			<arg line="--exclude SplClassLoader.php" />
+			<arg line="--suffixes php" />
+		</exec>
+		<exec dir="${basedir}" executable="phpmd" output="${logdir}/phpmd.log">
+			<arg line="${appdir}" />
+			<arg line="text" />
+			<arg line="codesize,design,naming,unusedcode" />
+			<arg line="--reportfile ${logdir}/phpmd.txt" />
+			<arg line="--exclude SplClassLoader.php" />
+			<arg line="--suffixes php" />
+		</exec>
+	</target>
+	<target name="phpdoc" description="Generate Application Documentation using PHPDocumentor2">
+		<exec dir="${basedir}" executable="phpdoc" output="${logdir}/phpdoc.log">
+			<arg line="run" />
+			<arg line="-t ${datadir}/build/phpdoc" />
+			<arg line="-d ${appdir}" />
+			<arg line="-p" />
+			<arg line="-q" />
+		</exec>
+	</target>
+	<target name="phpunit" description="run phpunit">
+		<exec dir="${basedir}" executable="phpunit" output="${logdir}/phpunit.log">
+			<arg line="test" />
+		</exec>
+	</target>
+</project>

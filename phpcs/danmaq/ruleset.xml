@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="danmaq">
+	<!-- Squiz, Zend, PEAR, PSR1, PHPCS, MySource and PSR2 -->
+	<rule ref="Zend">
+		<!-- BSDオールマンスタイルの字下げを許容する -->
+		<exclude name="PEAR.ControlStructures.ControlSignature" />
+	</rule>
+	<rule ref="Generic.PHP.LowerCaseKeyword" />
+</ruleset>

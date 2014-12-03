@@ -74,7 +74,12 @@
 		font-weight: bold;
 		margin: 0px;
 		padding: 1em 2em;
-		text-align: center;
+		text-align: left;
+	}
+
+	address ul
+	{
+		list-style-type: none;
 	}
 
 	p.textfield input[type="text"]

@@ -1,7 +1,7 @@
 <?php
 
-require_once 'SplClassLoader.php';
-$loader = new SplClassLoader('UnityCrash', 'lib/vendors');
+require_once 'application/SplClassLoader.php';
+$loader = new SplClassLoader('UnityCrash', 'application/lib/vendors');
 $loader->register();
 
 use UnityCrash\State\Context;

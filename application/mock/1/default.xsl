@@ -159,7 +159,13 @@
 					</section>
 					<footer>
 						<hr />
-						<address xml:lang="en">by <a href="https://twitter.com/danmaq" hreflang="ja-JP">@danmaq</a><br />Copyright © 2014 <a href="http://danmaq.com/" hreflang="ja-JP">danmaq</a> All rights reserved.</address>
+						<address xml:lang="en">
+							<p>Copyright © 2014 <a href="http://danmaq.com/" hreflang="ja-JP">danmaq</a> All rights reserved.</p>
+							<ul>
+								<li>Produced: <a href="https://twitter.com/danmaq" hreflang="ja-JP">Mc (MAKU)</a></li>
+								<li>Illustration: <a href="https://twitter.com/RidoCenter" hreflang="ja-JP">Rido</a></li>
+							</ul>
+						</address>
 					</footer>
 				</div>
 			</body>
