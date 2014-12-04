@@ -4,7 +4,10 @@
 	<property name="appdir"  value="${basedir}/application" />
 	<property name="datadir" value="${basedir}/data" />
 	<property name="logdir"  value="${datadir}/build/logs" />
-	<target name="build" depends="clean, prepare, phpcs, phpmd, phpdoc, phpunit">
+	<target name="build" depends="clean, prepare, phpcs, phpmd, phpcpd, phpdoc, phpunit">
+	</target>
+	<target name="trueclean">
+		<delete dir="${datadir}" quiet="true" />
 	</target>
 	<target name="clean">
 		<delete dir="${logdir}" quiet="true" />
@@ -12,9 +15,9 @@
 		<delete dir="${datadir}/build/phpdoc" quiet="true" />
 	</target>
 	<target name="prepare">
-		<mkdir dir="${logdir}" />
-		<mkdir dir="${datadir}/build/coverage" />
-		<mkdir dir="${datadir}/build/phpdoc" />
+		<mkdir dir="${logdir}" mode="0777" />
+		<mkdir dir="${datadir}/build/coverage" mode="0777" />
+		<mkdir dir="${datadir}/build/phpdoc" mode="0777" />
 	</target>
 	<target name="phpcs">
 		<phpcodesniffer standard="phpcs/danmaq"
@@ -45,6 +48,13 @@
 			<arg line="--suffixes php" />
 		</exec>
 	</target>
+	<target name="phpcpd">
+		<exec dir="${basedir}" executable="phpcpd" output="${logdir}/phpcpd.log">
+			<arg line="--log-pmd ${logdir}/phpcpd.xml" />
+			<arg line="--names *.php,*.phtml" />
+			<arg line="${appdir}" />
+		</exec>
+	</target>
 	<target name="phpdoc" description="Generate Application Documentation using PHPDocumentor2">
 		<exec dir="${basedir}" executable="phpdoc" output="${logdir}/phpdoc.log">
 			<arg line="run" />
@@ -56,7 +66,10 @@
 	</target>
 	<target name="phpunit" description="run phpunit">
 		<exec dir="${basedir}" executable="phpunit" output="${logdir}/phpunit.log">
-			<arg line="test" />
+			<arg line="--configuration=${basedir}/test/phpunit.xml" />
+			<arg line="--log-junit=${logdir}/phpunit.xml" />
+			<arg line="--coverage-html=${datadir}/build/coverage/" />
+			<arg line="--coverage-clover=${logdir}/coverage.xml" />
 		</exec>
 	</target>
 </project>

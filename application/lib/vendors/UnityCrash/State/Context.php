@@ -6,17 +6,17 @@ use SplObjectStorage;
 
 class Context implements IContext
 {
-	/** 汎用的に使用できる値のストレージ。 */
-	private $_storage = array();
-	
-	/** 前回有効だった状態。 */
-	private $_previousState;
-	
-	/** 現在の状態。 */
-	private $_currentState;
-	
-	/** 次に遷移すべき状態。 */
-	private $_nextState;
+//	/** 汎用的に使用できる値のストレージ。 */
+//	private $_storage = array();
+//	
+//	/** 前回有効だった状態。 */
+//	private $_previousState;
+//	
+//	/** 現在の状態。 */
+//	private $_currentState;
+//	
+//	/** 次に遷移すべき状態。 */
+//	private $_nextState;
 
 	/**
 	 * Constructor.

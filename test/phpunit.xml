@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.3/phpunit.xsd">
+	<testsuite name="Application Test Suite">
+		<directory>.</directory>
+	</testsuite>
+	<filter>
+		<blacklist>
+			<file>../application/SplClassLoader.php</file>
+		</blacklist>
+	</filter>
+</phpunit>
