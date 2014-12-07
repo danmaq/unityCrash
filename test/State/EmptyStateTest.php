@@ -1,5 +1,6 @@
 <?php
 
+require_once 'test/TestCaseExtension.php';
 require_once 'application/SplClassLoader.php';
 $loader = new SplClassLoader('UnityCrash', 'application/lib/vendors');
 $loader->register();
@@ -8,8 +9,53 @@ use UnityCrash\State\Context;
 use UnityCrash\State\EmptyState;
 use UnityCrash\Utils\Singleton;
 
-class EmptyStateTest extends PHPUnit_Framework_TestCase
+class EmptyStateTest extends TestCaseExtension
 {
+	
+	private $context;
+	
+	/** Constructor. */
+	public function __construct()
+	{
+		parent::__construct();
+		$this->context = new Context();
+	}
+
+	/** @scenario インスタンスを取得できる */
+	public function shouldGetInstance()
+	{
+		$this
+			->given('インスタンスを取得する')
+			->then('指定したインスタンスが取得できる', 'UnityCrash\State\EmptyState')
+			->and('Singletonである');
+	}
+
+	/** @scenario setupが呼べる */
+	public function shouldCallSetup()
+	{
+		$this
+			->given('インスタンスを取得する')
+			->then('setupが呼べる');
+	}
+
+	/** @scenario loopが呼べる */
+	public function shouldCallLoop()
+	{
+		$this
+			->given('インスタンスを取得する')
+			->then('loopが呼べる');
+	}
+
+	/** @scenario teardownが呼べる */
+	public function shouldCallTeardown()
+	{
+		$this
+			->given('インスタンスを取得する')
+			->then('teardownが呼べる');
+	}
+
+/*
+
 	private $context;
 
 	public function testInstance()
@@ -42,4 +88,5 @@ class EmptyStateTest extends PHPUnit_Framework_TestCase
 	{
 		$this->context = new Context();
 	}
+	*/
 }

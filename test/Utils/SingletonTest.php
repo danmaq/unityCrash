@@ -1,5 +1,6 @@
 <?php
 
+require_once 'test/TestCaseExtension.php';
 require_once 'application/SplClassLoader.php';
 $loader = new SplClassLoader('UnityCrash', 'application/lib/vendors');
 $loader->register();
@@ -10,10 +11,21 @@ class ConcretedSingleton extends Singleton
 {
 }
 
-class SingletonTest extends PHPUnit_Extensions_Story_TestCase
+class SingletonTest extends TestCaseExtension
 {
+	
+	/** Constructor. */
+	public function __construct()
+	{
+		parent::__construct();
+		$this->givenTable['インスタンスを取得する'] = array($this, 'getInstance');
+		$this->thenTable['指定したインスタンスが取得できる'] = array($this, 'isInstance');
+		$this->thenTable['同一性が取れる'] = array($this, 'isEqualInstance');
+		$this->thenTable['複製することはできない'] = array($this, 'cannotCopy');
+	}
+	
 	/** @scenario インスタンスを取得できる */
-	public function getInstance()
+	public function shouldGetInstance()
 	{
 		$this
 			->given('インスタンスを取得する')
@@ -22,82 +34,41 @@ class SingletonTest extends PHPUnit_Extensions_Story_TestCase
 	}
 
 	/** @scenario インスタンスを複製することはできない */
-	public function cannotCopy()
+	public function shouldCannotCopy()
 	{
 		$this
 			->given('インスタンスを取得する')
 			->then('複製することはできない');
 	}
-
-	public function runGiven(&$world, $action, $arguments)
+	
+	/** インスタンスを取得する */
+	protected function getInstance(array $world, array $arguments)
 	{
-		switch ($action)
-		{
-			case 'インスタンスを取得する';
-				$world['instance'] = ConcretedSingleton::getInstance();
-				break;
-			default:
-				$this->notImplemented($action);
-				break;
-		}
+		$world['instance'] = ConcretedSingleton::getInstance();
+		return $world;
 	}
 
-	public function runWhen(&$world, $action, $arguments)
+	/** 指定したインスタンスが取得できる */
+	protected function isInstance(array $world, array $arguments)
 	{
-		switch ($action)
-		{
-			default:
-				$this->notImplemented($action);
-				break;
-		}
+		$this->assertInstanceOf($arguments[0], $world['instance']);
+		return $world;
 	}
 
-	public function runThen(&$world, $action, $arguments)
+	/** 同一性が取れる */
+	protected function isEqualInstance(array $world, array $arguments)
 	{
-		switch ($action)
-		{
-			case '指定したインスタンスが取得できる';
-				$this->assertInstanceOf($arguments[0], $world['instance']);
-				break;
-			case '同一性が取れる';
-				$this->assertEquals($world['instance'], ConcretedSingleton::getInstance());
-				break;
-			case '複製することはできない':
-				$this->assertException(
-					function () use ($world) { clone $world['instance']; },
-					'LogicException',
-					'Singleton object must not clone.');
-				break;
-			default:
-				$this->notImplemented($action);
-				break;
-		}
+		$this->assertEquals($world['instance'], ConcretedSingleton::getInstance());
+		return $world;
 	}
 
-	/**
-	 * 例外をテストします。
-	 *
-	 * @param callable $func 実行する関数。引数は渡しません。
-	 * @param string $type 想定する例外の型。省略時は判定しません。
-	 * @param string $desc 想定する例外のメッセージ。省略時は判定しません。
-	 */
-	private function assertException($func, $type = null, $desc = null)
+	/** 複製することはできない */
+	protected function cannotCopy(array $world, array $arguments)
 	{
-		try
-		{
-			$func();
-			$this->fail($action);
-		}
-		catch (Exception $e)
-		{
-			if ($type != null)
-			{
-				$this->assertInstanceOf($type, $e);
-			}
-			if ($desc != null)
-			{
-				$this->assertEquals($desc, $e->getMessage());
-			}
-		}
+		$this->assertException(
+			function () use ($world) { clone $world['instance']; },
+			'LogicException',
+			'Singleton object must not clone.');
+		return $world;
 	}
 }
