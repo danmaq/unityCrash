@@ -3,6 +3,7 @@
 
   <xsd:element name="body">
     <xsd:complexType>
+      <xsd:attribute name="dynamic" type="xsd:boolean" use="optional" default="true" />
       <xsd:attribute name="result" type="xsd:boolean" use="optional" default="true" />
       <xsd:attribute name="query" type="xsd:string" use="optional" default="Unity落ちた" />
       <xsd:attribute name="message" type="xsd:string" use="optional" />

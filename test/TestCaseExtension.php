@@ -65,17 +65,17 @@ abstract class TestCaseExtension extends PHPUnit_Extensions_Story_TestCase
 		try
 		{
 			$func();
-			$this->fail($action);
+			$this->fail('例外が発生すべき状況で、発生しませんでした。');
 		}
 		catch (Exception $e)
 		{
 			if ($type != null)
 			{
-				$this->assertInstanceOf($type, $e);
+				$this->assertInstanceOf($type, $e, '適切な例外の種類である');
 			}
 			if ($desc != null)
 			{
-				$this->assertEquals($desc, $e->getMessage());
+				$this->assertEquals($desc, $e->getMessage(), '適切な例外の解説文である');
 			}
 		}
 	}
@@ -92,7 +92,7 @@ abstract class TestCaseExtension extends PHPUnit_Extensions_Story_TestCase
 	{
 		if (isset($table[$action]))
 		{
-			$world = call_user_func($table[$action], $world, $arguments);
+			call_user_func_array($table[$action], array(&$world, $arguments));
 		}
 		else
 		{

@@ -3,8 +3,8 @@
 namespace UnityCrash\State;
 
 /**
- * State�p�^�[���ɂ������Ԃ̒�`�ł��B
- * ���̃C���^�[�t�F�C�X���������āA���W�b�N�������L�q���܂��B
+ * Stateパターンにおける状態の定義です。
+ * このインターフェイスを実装して、ロジック部分を記述します。
  *
  * @package UnityCrash\State
  * @author Mc at danmaq
@@ -13,23 +13,27 @@ interface IState
 {
 
 	/**
-	 * �R���e�L�X�g�ɂ��̏�Ԃ��K�p���ꂽ����ɌĂяo����܂��B
+	 * コンテキストにこの状態が適用された直後に呼び出されます。
+	 * 現在の状態の初期化に必要な挙動があれば、ここに実装してください。
 	 *
-	 * @param iContext $context �R���e�L�X�g�B
+	 * @param IContext $context コンテキスト。
 	 */
-	public function setup(iContext $context);
+	public function setup(IContext $context);
 
 	/**
-	 * �R���e�L�X�g�ɏ�Ԃ��K�p����Ă���ԁA�������ČĂяo����܂��B
+	 * コンテキストに状態が適用されている間、 IContext.phase()
+	 * メソッドを実行することで、このメソッドが呼び出されます。
+	 * 現在の状態の挙動については、ここに実装してください。
 	 *
-	 * @param iContext $context �R���e�L�X�g�B
+	 * @param IContext $context コンテキスト。
 	 */
-	public function loop(iContext $context);
+	public function phase(IContext $context);
 
 	/**
-	 * �R���e�L�X�g���ʂ̏�ԂւƑJ�ڂ���钼�O�ɌĂяo����܂��B
+	 * コンテキストが別の状態へと遷移される直前に呼び出されます。
+	 * 現在の状態を終える際に後片付けが必要であれば、ここに実装してください。
 	 *
-	 * @param iContext $context �R���e�L�X�g�B
+	 * @param IContext $context コンテキスト。
 	 */
-	public function teardown(iContext $context);
+	public function teardown(IContext $context);
 }

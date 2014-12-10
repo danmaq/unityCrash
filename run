@@ -1,0 +1,4 @@
+#!/bin/sh
+cd application
+php -f index.php
+cd ..

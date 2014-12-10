@@ -5,25 +5,25 @@ namespace UnityCrash\Utils;
 use LogicException;
 
 /**
- * Singleton パターンにおける既定の実装です。この抽象クラスを継承することで、
- * Singleton クラスとして機能します。完全な Singleton クラスにするために、
- * 継承先ではコンストラクタを private に設定することを推奨します。
+ * Singleton パターンにおける既定の実装です。
+ * この抽象クラスを継承することで、Singleton クラスとして機能します。
  *
  * @package UnityCrash\Utils
  * @author Mc at danmaq
  */
 abstract class Singleton
 {
+
 	/** クラス オブジェクト一覧。 */
 	private static $_instance = array();
-	
+
 	/**
 	 * コンストラクタ。
 	 */
 	protected function __construct()
 	{
 	}
-	
+
 	/**
 	 * クラスの複製を抑制します。
 	 */
@@ -31,7 +31,7 @@ abstract class Singleton
 	{
 		throw new LogicException('Singleton object must not clone.');
 	}
-	
+
 	/**
 	 * シングルトン オブジェクトを取得します。
 	 *

@@ -2,107 +2,148 @@
 
 namespace UnityCrash\State;
 
-use SplObjectStorage;
-
 class Context implements IContext
 {
-//	/** ”Ä—p“I‚Ég—p‚Å‚«‚é’l‚ÌƒXƒgƒŒ[ƒWB */
-//	private $_storage = array();
-//	
-//	/** ‘O‰ñ—LŒø‚¾‚Á‚½ó‘ÔB */
-//	private $_previousState;
-//	
-//	/** Œ»İ‚Ìó‘ÔB */
-//	private $_currentState;
-//	
-//	/** Ÿ‚É‘JˆÚ‚·‚×‚«ó‘ÔB */
-//	private $_nextState;
+	/** æ±ç”¨çš„ã«ä½¿ç”¨ã§ãã‚‹å€¤ã®ã‚¹ãƒˆãƒ¬ãƒ¼ã‚¸ã€‚ */
+	private $_storage = array();
+
+	/** å‰å›æœ‰åŠ¹ã ã£ãŸçŠ¶æ…‹ã€‚ */
+	private $_previousState;
+	
+	/** ç¾åœ¨ã®çŠ¶æ…‹ã€‚ */
+	private $_currentState;
+
+	/** æ¬¡ã«é·ç§»ã™ã¹ãçŠ¶æ…‹ã€‚ */
+	private $_nextState = null;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param IState $defaultState ‰Šú‚Ìó‘ÔB
-	 * È—ª‚ÍEmptyState‚ª‰Šúó‘Ô‚Æ‚È‚è‚Ü‚·B
+	 * @param IState $defaultState åˆæœŸã®çŠ¶æ…‹ã€‚
+	 * çœç•¥æ™‚ã¯EmptyStateãŒåˆæœŸçŠ¶æ…‹ã¨ãªã‚Šã¾ã™ã€‚
 	 */
 	public function __construct(IState $defaultState = null)
 	{
-		
+		$this->_previousState = EmptyState::getInstance();
+		$this->_currentState =
+			isset($defaultState) ? $defaultState : EmptyState::getInstance();
+		$this->getCurrentState()->setup($this);
 	}
 
 	/**
-	 * ”Ä—p“I‚Ég—p‚Å‚«‚é˜A‘z”z—ñ‚ğæ“¾‚µ‚Ü‚·B
+	 * æ±ç”¨çš„ã«ä½¿ç”¨ã§ãã‚‹é€£æƒ³é…åˆ—ã‚’å–å¾—ã—ã¾ã™ã€‚
 	 *
-	 * @return array ˜A‘z”z—ñB
+	 * @return array é€£æƒ³é…åˆ—ã€‚
 	 */
-	public function getStorage()
+	public function &getStorage()
 	{
+		return $this->_storage;
 	}
 
 	/**
-	 * ‘O‰ñ—LŒø‚¾‚Á‚½ó‘Ô‚ğæ“¾‚µ‚Ü‚·B
+	 * å‰å›æœ‰åŠ¹ã ã£ãŸçŠ¶æ…‹ã‚’å–å¾—ã—ã¾ã™ã€‚
 	 *
-	 * @return IState ó‘ÔB
+	 * @return IState çŠ¶æ…‹ã€‚
 	 */
 	public function getPreviousState()
 	{
+		return $this->_previousState;
 	}
 
 	/**
-	 * Œ»İ‚Ìó‘Ô‚ğæ“¾‚µ‚Ü‚·B
+	 * ç¾åœ¨ã®çŠ¶æ…‹ã‚’å–å¾—ã—ã¾ã™ã€‚
 	 *
-	 * @return IState ó‘ÔB
+	 * @return IState çŠ¶æ…‹ã€‚
 	 */
 	public function getCurrentState()
 	{
+		return $this->_currentState;
 	}
 
 	/**
-	 * Ÿ‚É‘JˆÚ‚·‚×‚«ó‘Ô‚ğæ“¾‚µ‚Ü‚·B
+	 * æ¬¡ã«é·ç§»ã™ã¹ãçŠ¶æ…‹ã‚’å–å¾—ã—ã¾ã™ã€‚
 	 *
-	 * @return IState ó‘ÔB
+	 * @return IState çŠ¶æ…‹ã€‚
 	 */
 	public function getNextState()
 	{
+		return $this->_nextState;
 	}
 
 	/**
-	 * Ÿ‚É‘JˆÚ‚·‚×‚«ó‘Ô‚ğİ’è‚µ‚Ü‚·B
+	 * æ¬¡ã«é·ç§»ã™ã¹ãçŠ¶æ…‹ã‚’è¨­å®šã—ã¾ã™ã€‚
 	 *
-	 * @param IState $state ó‘ÔB
+	 * @param IState $state çŠ¶æ…‹ã€‚
 	 */
 	public function setNextState(IState $state = null)
 	{
+		$this->_nextState = $state;
 	}
 
 	/**
-	 * ó‘Ô‚ªI—¹‚³‚ê‚½‚©‚Ç‚¤‚©‚ğæ“¾‚µ‚Ü‚·B
+	 * çŠ¶æ…‹ãŒçµ‚äº†ã•ã‚ŒãŸã‹ã©ã†ã‹ã‚’å–å¾—ã—ã¾ã™ã€‚
 	 *
-	 * @return bool ó‘Ô‚ªI—¹‚³‚ê‚½ê‡AtrueB
+	 * @return bool çŠ¶æ…‹ãŒçµ‚äº†ã•ã‚ŒãŸå ´åˆã€trueã€‚
 	 */
 	public function isTerminate()
 	{
+		return
+			$this->getCurrentState() == EmptyState::getInstance() &&
+			is_null($this->getNextState());
 	}
 
 	/**
-	 * ƒRƒ“ƒeƒLƒXƒg‚Éó‘Ô‚ª“K—p‚³‚ê‚Ä‚¢‚éŠÔA”½•œ‚µ‚ÄŒÄ‚Ño‚³‚ê‚Ü‚·B
-	 *
-	 * @param object $context ƒRƒ“ƒeƒLƒXƒgB
+	 * çŠ¶æ…‹ã‚’å®Ÿè¡Œã—ã¾ã™ã€‚
+	 */
+	public function phase()
+	{
+		$this->commitNextState();
+		$this->getCurrentState()->phase($this);
+	}
+
+	/**
+	 * åå¾©ã—ã¦çŠ¶æ…‹ã‚’å®Ÿè¡Œã—ã¾ã™ã€‚çŠ¶æ…‹ãŒçµ‚äº†ã•ã‚ŒãŸã‚¿ã‚¤ãƒŸãƒ³ã‚°ã§åˆ¶å¾¡ãŒæˆ»ã‚Šã¾ã™ã€‚
+	 * æ§‹é€ ä¸Šã€çŠ¶æ…‹ã®å®Ÿè£…æ¬¡ç¬¬ã§ã¯ç„¡é™ãƒ«ãƒ¼ãƒ—ã«é™¥ã‚‹ã“ã¨ãŒã‚ã‚Šã¾ã™ã®ã§ã€
+	 * æ‰±ã„ã«ã¯ååˆ†æ³¨æ„ã—ã¦ãã ã•ã„ã€‚
+	 * 
+	 * @return çŠ¶æ…‹ãŒçµ‚äº†ã™ã‚‹ã¾ã§ã«è¦ã—ãŸãƒ•ã‚§ãƒ¼ã‚ºã®åå¾©å®Ÿè¡Œå›æ•°ã€‚
 	 */
 	public function loop()
 	{
+		for ($i = 0; !$this->isTerminate(); $i++)
+		{
+			$this->phase();
+		}
+		return $i;
 	}
 
 	/**
-	 * Ÿ‚É‘JˆÚ‚·‚×‚«ó‘Ô‚ªİ’è‚³‚ê‚Ä‚¢‚éê‡Aó‘Ô‚ğŠm’è‚µ‚Ü‚·B
+	 * æ¬¡ã«é·ç§»ã™ã¹ãçŠ¶æ…‹ãŒè¨­å®šã•ã‚Œã¦ã„ã‚‹å ´åˆã€çŠ¶æ…‹ã‚’ç¢ºå®šã—ã¾ã™ã€‚
 	 */
-	public function commitState()
+	public function commitNextState()
 	{
+		$result = !is_null($this->getNextState());
+		if ($result)
+		{
+			$this->getCurrentState()->teardown($this);
+			$this->_previousState = $this->_currentState;
+			$this->_currentState = $this->_nextState;
+			$this->setnextState();
+			$this->getCurrentState()->setup($this);
+		}
+		return $result;
 	}
 
 	/**
-	 * ‹ó‚Ìó‘Ô‚ğİ’è‚µA’l‚ğƒŠƒZƒbƒg‚µ‚Äó‘Ô‚ğI—¹‚µ‚Ü‚·B
+	 * ç©ºã®çŠ¶æ…‹ã‚’è¨­å®šã—ã€å€¤ã‚’ãƒªã‚»ãƒƒãƒˆã—ã¦çŠ¶æ…‹ã‚’çµ‚äº†ã—ã¾ã™ã€‚
 	 */
 	public function terminate()
 	{
+		$this->setNextState(EmptyState::getInstance());
+		$this->commitNextState();
+		$this->_previousState = EmptyState::getInstance();
+		$this->_currentState = EmptyState::getInstance();
+		$this->_nextState = null;
+		$this->_storage = array();
 	}
 }

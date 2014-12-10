@@ -72,6 +72,9 @@
 						<xsl:value-of select="$title" />
 					</xsl:attribute>
 				</meta>
+				<xsl:if test="@dynamic = 'true'">
+					<meta name="robots" content="noindex,nofollow,noarchive" />
+				</xsl:if>
 				<meta name="author" content="danmaq" />
 				<meta name="viewport" content="width=780" />
 				<title><xsl:value-of select="$title" /></title>

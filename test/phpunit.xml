@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.3/phpunit.xsd"
-	strict="true">
+	colors="true"
+	strict="false"
+	verbose="false">
 	<testsuite name="Application Test Suite">
 		<directory>.</directory>
 	</testsuite>
@@ -10,4 +12,7 @@
 			<file>../application/SplClassLoader.php</file>
 		</blacklist>
 	</filter>
+	<php>
+		<ini name="xdebug.show_exception_trace" value="1" />
+	</php>
 </phpunit>

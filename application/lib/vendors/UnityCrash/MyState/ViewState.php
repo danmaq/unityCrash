@@ -1,17 +1,19 @@
 <?php
 
-namespace UnityCrash\State;
+namespace UnityCrash\MyState;
 
+use UnityCrash\State\IContext;
+use UnityCrash\State\IState;
 use UnityCrash\Utils\Singleton;
 
 /**
- * Stateパターンにおける終末の状態の実装です。コンテキストがこの状態に
- * 至った場合、外部から状態操作を加えない限り永遠にダミーループに陥ります。
+ * ビューを生成するための状態。
+ * MVCモデルにおけるビュー(コントローラ)に該当する状態。
  *
- * @package UnityCrash\State
+ * @package UnityCrash\MyState
  * @author Mc at danmaq
  */
-final class EmptyState extends Singleton implements IState
+final class ViewState extends Singleton implements IState
 {
 
 	/**

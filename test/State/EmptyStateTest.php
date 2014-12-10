@@ -7,18 +7,26 @@ $loader->register();
 
 use UnityCrash\State\Context;
 use UnityCrash\State\EmptyState;
-use UnityCrash\Utils\Singleton;
 
 class EmptyStateTest extends TestCaseExtension
 {
-	
-	private $context;
+
+	/** コンテキスト オブジェクトに紐づけられたキー。 */
+	const CONTEXT = 'context';
+
+	/** インスタンスと紐づけられるキー。 */
+	const INSTANCE = 'instance';
 	
 	/** Constructor. */
 	public function __construct()
 	{
 		parent::__construct();
-		$this->context = new Context();
+		$this->givenTable['インスタンスを取得する'] = array($this, 'getInstance');
+		$this->thenTable['指定したインスタンスが取得できる'] = array($this, 'isInstance');
+		$this->thenTable['Singletonである'] = array($this, 'isSingleton');
+		$this->thenTable['setupが呼べる'] = array($this, 'callSetup');
+		$this->thenTable['phaseが呼べる'] = array($this, 'callPhase');
+		$this->thenTable['teardownが呼べる'] = array($this, 'callTeardown');
 	}
 
 	/** @scenario インスタンスを取得できる */
@@ -38,12 +46,12 @@ class EmptyStateTest extends TestCaseExtension
 			->then('setupが呼べる');
 	}
 
-	/** @scenario loopが呼べる */
-	public function shouldCallLoop()
+	/** @scenario phaseが呼べる */
+	public function shouldCallPhase()
 	{
 		$this
 			->given('インスタンスを取得する')
-			->then('loopが呼べる');
+			->then('phaseが呼べる');
 	}
 
 	/** @scenario teardownが呼べる */
@@ -53,40 +61,46 @@ class EmptyStateTest extends TestCaseExtension
 			->given('インスタンスを取得する')
 			->then('teardownが呼べる');
 	}
-
-/*
-
-	private $context;
-
-	public function testInstance()
+	
+	/** インスタンスを取得する */
+	protected function getInstance(array &$world, array $arguments)
 	{
-		$this->assertTrue(class_exists('UnityCrash\State\EmptyState'), 'UnityCrash\State\EmptyState is not found');
-		$state = UnityCrash\State\EmptyState::getInstance();
-		$this->assertInstanceOf('UnityCrash\Utils\Singleton', $state);
-		$this->assertInstanceOf('UnityCrash\State\EmptyState', $state);
+		$this->assertTrue(class_exists('UnityCrash\State\EmptyState'), 'クラスが存在する');
+		$world[self::INSTANCE] = EmptyState::getInstance();
+		$world[self::CONTEXT] = new Context();
 	}
 
-	public function testSetup()
+	/** 指定したインスタンスが取得できる */
+	protected function isInstance(array &$world, array $arguments)
 	{
-		// ホワイトボックステストのみ
-		UnityCrash\State\EmptyState::getInstance()->setup($this->context);
+		$this->assertInstanceOf($arguments[0], $world[self::INSTANCE]);
 	}
-
-	public function testLoop()
+	
+	/** Singletonである */
+	protected function isSingleton(array &$world, array $arguments)
 	{
-		// ホワイトボックステストのみ
-		UnityCrash\State\EmptyState::getInstance()->loop($this->context);
+		$this->assertInstanceOf(
+			'UnityCrash\Utils\Singleton', $world[self::INSTANCE], '状態はシングルトンである');
 	}
-
-	public function testTeardown()
+	
+	/** setupが呼べる */
+	protected function callSetup(array &$world, array $arguments)
 	{
 		// ホワイトボックステストのみ
-		UnityCrash\State\EmptyState::getInstance()->teardown($this->context);
+		$world[self::INSTANCE]->setup($world[self::CONTEXT]);
 	}
-
-	protected function setUp()
+	
+	/** phaseが呼べる */
+	protected function callPhase(array &$world, array $arguments)
 	{
-		$this->context = new Context();
+		// ホワイトボックステストのみ
+		$world[self::INSTANCE]->phase($world[self::CONTEXT]);
 	}
-	*/
+	
+	/** teardownが呼べる */
+	protected function callTeardown(array &$world, array $arguments)
+	{
+		// ホワイトボックステストのみ
+		$world[self::INSTANCE]->teardown($world[self::CONTEXT]);
+	}
 }

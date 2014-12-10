@@ -39,7 +39,7 @@ class TestCaseExtensionTest extends TestCaseExtension
 	}
 	
 	/** givenを実行する */
-	protected function throughGiven(array $world, array $arguments)
+	protected function throughGiven(array &$world, array $arguments)
 	{
 		$this->assertNotNull($world, 'ワーク テーブルは null ではない');
 		$this->assertNotNull($arguments, '引数は null ではない');
@@ -49,11 +49,10 @@ class TestCaseExtensionTest extends TestCaseExtension
 		$this->assertEquals(1, $arguments[1], '引数が設定されている');
 		$world['given'] = $arguments[0];
 		$world[$arguments[0]] = $arguments[1];
-		return $world;
 	}
 	
 	/** givenを実行する2 */
-	protected function throughGiven2(array $world, array $arguments)
+	protected function throughGiven2(array &$world, array $arguments)
 	{
 		$this->assertNotNull($world, 'ワーク テーブルは null ではない');
 		$this->assertNotNull($arguments, '引数は null ではない');
@@ -63,11 +62,10 @@ class TestCaseExtensionTest extends TestCaseExtension
 		$this->assertEquals(10, $arguments[1], '引数が設定されている');
 		$world['given'] = $arguments[0];
 		$world[$arguments[0]] = $arguments[1];
-		return $world;
 	}
 	
 	/** whenを実行する */
-	protected function throughWhen(array $world, array $arguments)
+	protected function throughWhen(array &$world, array $arguments)
 	{
 		$this->assertEquals(2, count($world), 'ワーク テーブルに要素が増えている');
 		$this->assertEquals(2, count($arguments), '引数が設定されている');
@@ -75,11 +73,10 @@ class TestCaseExtensionTest extends TestCaseExtension
 		$this->assertEquals(2, $arguments[1], '引数が設定されている');
 		$world['when'] = $arguments[0];
 		$world[$arguments[0]] = $arguments[1];
-		return $world;
 	}
 	
 	/** whenを実行する2 */
-	protected function throughWhen2(array $world, array $arguments)
+	protected function throughWhen2(array &$world, array $arguments)
 	{
 		$this->assertEquals(2, count($world), 'ワーク テーブルに要素が増えている');
 		$this->assertEquals(2, count($arguments), '引数が設定されている');
@@ -87,11 +84,10 @@ class TestCaseExtensionTest extends TestCaseExtension
 		$this->assertEquals(20, $arguments[1], '引数が設定されている');
 		$world['when'] = $arguments[0];
 		$world[$arguments[0]] = $arguments[1];
-		return $world;
 	}
 	
 	/** thenを実行する */
-	protected function throughThen(array $world, array $arguments)
+	protected function throughThen(array &$world, array $arguments)
 	{
 		$this->assertEquals(4, count($world), 'ワーク テーブルに要素が増えている');
 		$this->assertEquals(2, count($arguments), '引数が設定されている');
@@ -99,11 +95,10 @@ class TestCaseExtensionTest extends TestCaseExtension
 		$this->assertEquals(3, $arguments[1], '引数が設定されている');
 		$world['then'] = $arguments[0];
 		$world[$arguments[0]] = $arguments[1];
-		return $world;
 	}
 	
 	/** thenを実行する2 */
-	protected function throughThen2(array $world, array $arguments)
+	protected function throughThen2(array &$world, array $arguments)
 	{
 		$this->assertEquals(4, count($world), 'ワーク テーブルに要素が増えている');
 		$this->assertEquals(2, count($arguments), '引数が設定されている');
@@ -111,11 +106,10 @@ class TestCaseExtensionTest extends TestCaseExtension
 		$this->assertEquals(30, $arguments[1], '引数が設定されている');
 		$world['then'] = $arguments[0];
 		$world[$arguments[0]] = $arguments[1];
-		return $world;
 	}
 
 	/** given,when,thenがすべて実行されている */
-	protected function allThru(array $world, array $arguments)
+	protected function allThru(array &$world, array $arguments)
 	{
 		$this->assertEquals(6, count($world), 'ワーク テーブルに要素が増えている');
 		$this->assertEquals(0, count($arguments), '引数が設定されている');
@@ -131,11 +125,10 @@ class TestCaseExtensionTest extends TestCaseExtension
 		$this->assertTrue(isset($world[$world['then']]), 'Thenが実行されている');
 		$this->assertEquals('piyo', $world['then'], 'Thenが実行されている');
 		$this->assertEquals(3, $world[$world['then']], 'Thenが実行されている');
-		return $world;
 	}
 
 	/** given,when,thenの2がすべて実行されている */
-	protected function allThru2(array $world, array $arguments)
+	protected function allThru2(array &$world, array $arguments)
 	{
 		$this->assertEquals(6, count($world), 'ワーク テーブルに要素が増えている');
 		$this->assertEquals(0, count($arguments), '引数が設定されている');
@@ -151,6 +144,5 @@ class TestCaseExtensionTest extends TestCaseExtension
 		$this->assertTrue(isset($world[$world['then']]), 'Thenが実行されている');
 		$this->assertEquals('baz', $world['then'], 'Thenが実行されている');
 		$this->assertEquals(30, $world[$world['then']], 'Thenが実行されている');
-		return $world;
 	}
 }

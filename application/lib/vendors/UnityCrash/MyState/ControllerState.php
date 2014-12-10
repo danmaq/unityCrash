@@ -1,17 +1,21 @@
 <?php
 
-namespace UnityCrash\State;
+namespace UnityCrash\MyState;
 
+use UnityCrash\Data\Constants;
+use UnityCrash\Data\Environment;
+use UnityCrash\State\IContext;
+use UnityCrash\State\IState;
 use UnityCrash\Utils\Singleton;
 
 /**
- * Stateパターンにおける終末の状態の実装です。コンテキストがこの状態に
- * 至った場合、外部から状態操作を加えない限り永遠にダミーループに陥ります。
+ * WebからのREST入力に対応して、動的に次に必要な処理を読み込むための、
+ * いわゆるMVCモデルにおけるコントローラに該当する状態。
  *
- * @package UnityCrash\State
+ * @package UnityCrash\MyState
  * @author Mc at danmaq
  */
-final class EmptyState extends Singleton implements IState
+final class ControllerState extends Singleton implements IState
 {
 
 	/**
@@ -31,6 +35,11 @@ final class EmptyState extends Singleton implements IState
 	 */
 	public function phase(IContext $context)
 	{
+		$query = Environment::getInstance()->getQuery();
+		if (isset($query['_url']))
+		{
+			
+		}
 	}
 
 	/**

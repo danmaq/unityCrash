@@ -13,7 +13,10 @@ class ConcretedSingleton extends Singleton
 
 class SingletonTest extends TestCaseExtension
 {
-	
+
+	/** インスタンスと紐づけられるキー。 */
+	const INSTANCE = 'instance';
+
 	/** Constructor. */
 	public function __construct()
 	{
@@ -42,33 +45,30 @@ class SingletonTest extends TestCaseExtension
 	}
 	
 	/** インスタンスを取得する */
-	protected function getInstance(array $world, array $arguments)
+	protected function getInstance(array &$world, array $arguments)
 	{
-		$world['instance'] = ConcretedSingleton::getInstance();
-		return $world;
+		$world[self::INSTANCE] = ConcretedSingleton::getInstance();
 	}
 
 	/** 指定したインスタンスが取得できる */
-	protected function isInstance(array $world, array $arguments)
+	protected function isInstance(array &$world, array $arguments)
 	{
-		$this->assertInstanceOf($arguments[0], $world['instance']);
-		return $world;
+		$this->assertInstanceOf($arguments[0], $world[self::INSTANCE]);
 	}
 
 	/** 同一性が取れる */
-	protected function isEqualInstance(array $world, array $arguments)
+	protected function isEqualInstance(array &$world, array $arguments)
 	{
-		$this->assertEquals($world['instance'], ConcretedSingleton::getInstance());
-		return $world;
+		$this->assertEquals($world[self::INSTANCE], ConcretedSingleton::getInstance());
 	}
 
 	/** 複製することはできない */
-	protected function cannotCopy(array $world, array $arguments)
+	protected function cannotCopy(array &$world, array $arguments)
 	{
+		$key = self::INSTANCE;
 		$this->assertException(
-			function () use ($world) { clone $world['instance']; },
+			function () use ($world, $key) { clone $world[$key]; },
 			'LogicException',
 			'Singleton object must not clone.');
-		return $world;
 	}
 }
