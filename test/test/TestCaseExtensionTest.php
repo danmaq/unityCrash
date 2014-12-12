@@ -16,6 +16,7 @@ class TestCaseExtensionTest extends TestCaseExtension
 		$this->thenTable['thenを実行する2'] = array($this, 'throughThen2');
 		$this->thenTable['given,when,thenがすべて実行されている'] = array($this, 'allThru');
 		$this->thenTable['given,when,thenの2がすべて実行されている'] = array($this, 'allThru2');
+		$this->thenTable['例外テストができる'] = array($this, 'validateAssertException');
 	}
 	
 	/** @scenario 該当するgiven-when-thenを実行する */
@@ -36,6 +37,14 @@ class TestCaseExtensionTest extends TestCaseExtension
 			->when('whenを実行する2', 'bar', 20)
 			->then('thenを実行する2', 'baz', 30)
 			->and('given,when,thenの2がすべて実行されている');
+	}
+	
+	/** @scenario 例外テストができる */
+	public function shouldAssertError()
+	{
+		$this
+			->given('givenを実行する', 'hoge', 1)
+			->then('例外テストができる');
 	}
 	
 	/** givenを実行する */
@@ -144,5 +153,12 @@ class TestCaseExtensionTest extends TestCaseExtension
 		$this->assertTrue(isset($world[$world['then']]), 'Thenが実行されている');
 		$this->assertEquals('baz', $world['then'], 'Thenが実行されている');
 		$this->assertEquals(30, $world[$world['then']], 'Thenが実行されている');
+	}
+
+	/** 例外テストができる */
+	protected function validateAssertException(array &$world, array $arguments)
+	{
+		$callback = function () { throw new Exception('HOGE'); };
+		$this->assertException($callback, 'Exception', 'HOGE');
 	}
 }

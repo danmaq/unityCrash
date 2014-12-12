@@ -18,6 +18,9 @@ use UnityCrash\Utils\Singleton;
 final class ControllerState extends Singleton implements IState
 {
 
+	/** 既定のエントリ ポイント。 */
+	const DEFAULT_ENTRY = 'message';
+
 	/**
 	 * コンテキストにこの状態が適用された直後に呼び出されます。
 	 *
@@ -31,15 +34,13 @@ final class ControllerState extends Singleton implements IState
 	 * コンテキストに状態が適用されている間、 IContext.phase()
 	 * メソッドを実行することで、このメソッドが呼び出されます。
 	 *
-	 * @param iContext $context コンテキスト。
+	 * @param IContext $context コンテキスト。
 	 */
 	public function phase(IContext $context)
 	{
-		$query = Environment::getInstance()->getQuery();
-		if (isset($query['_url']))
-		{
-			
-		}
+		$rest = Environment::getInstance()->getRestParams();
+		$entry = count($rest) === 0 ? self::DEFAULT_ENTRY : $rest[0];
+		$context->setNextState(include self::getPath($entry));
 	}
 
 	/**
@@ -49,5 +50,19 @@ final class ControllerState extends Singleton implements IState
 	 */
 	public function teardown(IContext $context)
 	{
+	}
+	
+	/**
+	 * RESTパラメータに合わせたパスを取得します。
+	 *
+	 * @param string $entry RESTエントリポイント。
+	 * @return string パス。
+	 */
+	private static function getPath($entry)
+	{
+		$dir = Environment::getInstance()->getCurrentDirectory();
+		$path = "{$dir}/rest/{$entry}.php";
+		$exists = $entry === self::DEFAULT_ENTRY || file_exists($path);
+		return $exists ? $path : self::getPath(self::DEFAULT_ENTRY);
 	}
 }

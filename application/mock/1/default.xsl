@@ -90,7 +90,8 @@
 						<h1><xsl:value-of select="$title" /></h1>
 					</header>
 					<section>
-						<form method="post" action="#">
+						<form method="post">
+							<xsl:attribute name="action"><xsl:value-of select="@root" />/message</xsl:attribute>
 							<fieldset>
 								<xsl:if test="@message">
 									<p>
@@ -107,13 +108,13 @@
 									</p>
 								</xsl:if>
 								<p class="textfield">
-									<input name="message" id="message" type="text" maxlength="89">
+									<input name="text" id="text" type="text" maxlength="89">
 										<xsl:attribute name="xml:lang">
 											<xsl:value-of select="$sourceLanguage" />
 										</xsl:attribute>
 										<xsl:attribute name="value"><xsl:value-of select="@query" /></xsl:attribute>
 									</input>
-									<label for="message"> http://dmq.cm/unitycrash <xsl:value-of select="$title" /></label>
+									<label for="text"> http://dmq.cm/unitycrash <xsl:value-of select="$title" /></label>
 								</p>
 								<p>
 									<input type="submit">

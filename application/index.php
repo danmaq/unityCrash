@@ -64,11 +64,8 @@ header('Cache-Control: no-cache');
 	<hr />
 <?php
 $context->phase();
-if (isset($_SERVER['QUERY_STRING']))
-{
-	echo getcwd() . "\n";
-	echo $_SERVER['QUERY_STRING'] . "\n";
-}
+//echo getcwd() . "\n";
+//print_r($_SERVER);
 ?>
 	<hr />
 	<address>by <a href="http://danmaq.com/">danmaq</a></address>

@@ -5,6 +5,7 @@ require_once 'application/SplClassLoader.php';
 $loader = new SplClassLoader('UnityCrash', 'application/lib/vendors');
 $loader->register();
 
+use UnityCrash\Data\Environment;
 use UnityCrash\MyState\ControllerState;
 use UnityCrash\State\Context;
 use UnityCrash\State\EmptyState;
@@ -27,6 +28,7 @@ class ControllerStateTest extends TestCaseExtension
 		$this->whenTable['コンテキストを実行する'] = array($this, 'runPhase');
 		$this->whenTable['REST情報を設定する'] = array($this, 'emulateHTTPRequest');
 		$this->whenTable['次の状態を指定する'] = array($this, 'setNextState');
+		$this->whenTable['カレントディレクトリ値を改変する'] = array($this, 'setCurrentDirectory');
 		$this->thenTable['指定したインスタンスが取得できる'] = array($this, 'validateInstance');
 		$this->thenTable['ワークが書き換わらない'] = array($this, 'validateWorkIsEmpty');
 		$this->thenTable['前回の状態が正しい'] = array($this, 'validatePreviousState');
@@ -59,7 +61,9 @@ class ControllerStateTest extends TestCaseExtension
 	{
 		$this
 			->given('初期状態としてインスタンスを食わせたコンテキストを取得する')
-			->when('コンテキストを実行する')
+			->when('カレントディレクトリ値を改変する', '/application')
+			->and('コンテキストを実行する')
+			->and('カレントディレクトリ値を改変する', null)
 			->then('ワークが書き換わらない')
 			->and('前回の状態が正しい', EmptyState::getInstance())
 			->and('現在の状態が正しい', ControllerState::getInstance())
@@ -72,6 +76,7 @@ class ControllerStateTest extends TestCaseExtension
 		$this
 			->given('初期状態としてインスタンスを食わせたコンテキストを取得する')
 			->when('REST情報を設定する', 'get', '/error/404')
+			->when('カレントディレクトリ値を改変する', '/application')
 			->and('コンテキストを実行する')
 			->then('ワークが書き換わらない')
 			->and('前回の状態が正しい', EmptyState::getInstance())
@@ -80,6 +85,7 @@ class ControllerStateTest extends TestCaseExtension
 			->when('REST情報を設定する', 'post', '/hoge')
 			->and('次の状態を指定する', null)
 			->and('コンテキストを実行する')
+			->and('カレントディレクトリ値を改変する', null)
 			->then('ワークが書き換わらない')
 			->and('前回の状態が正しい', EmptyState::getInstance())
 			->and('現在の状態が正しい', ControllerState::getInstance())
@@ -91,8 +97,10 @@ class ControllerStateTest extends TestCaseExtension
 	{
 		$this
 			->given('初期状態としてインスタンスを食わせたコンテキストを取得する')
+			->when('カレントディレクトリ値を改変する', '/application')
 			->and('コンテキストを実行する')
 			->and('コンテキストを実行する')
+			->and('カレントディレクトリ値を改変する', null)
 			->then('ワークが書き換わらない');
 		// 状態遷移そのものはContextのテストでしているので、ここではテストしない。
 	}
@@ -127,6 +135,13 @@ class ControllerStateTest extends TestCaseExtension
 		$query = $arguments[1];
 		
 		$this->fail('Not Implements.');
+	}
+
+	/** カレントディレクトリ値を改変する */
+	protected function setCurrentDirectory(array &$world, array $arguments)
+	{
+		$this->assertEquals(1, count($arguments), '引数は 1 つ必要');
+		Environment::getInstance()->setCurrentDirectory(getcwd() . $arguments[0]);
 	}
 
 	/** 次の状態を指定する */

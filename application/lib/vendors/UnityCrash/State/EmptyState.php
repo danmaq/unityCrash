@@ -27,7 +27,7 @@ final class EmptyState extends Singleton implements IState
 	 * コンテキストに状態が適用されている間、 IContext.phase()
 	 * メソッドを実行することで、このメソッドが呼び出されます。
 	 *
-	 * @param iContext $context コンテキスト。
+	 * @param IContext $context コンテキスト。
 	 */
 	public function phase(IContext $context)
 	{

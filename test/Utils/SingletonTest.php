@@ -66,9 +66,7 @@ class SingletonTest extends TestCaseExtension
 	protected function cannotCopy(array &$world, array $arguments)
 	{
 		$key = self::INSTANCE;
-		$this->assertException(
-			function () use ($world, $key) { clone $world[$key]; },
-			'LogicException',
-			'Singleton object must not clone.');
+		$callback = function () use ($world, $key) { clone $world[$key]; };
+		$this->assertException($callback, 'LogicException', 'Singleton object must not clone.');
 	}
 }

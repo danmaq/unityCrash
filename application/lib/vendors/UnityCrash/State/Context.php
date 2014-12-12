@@ -87,9 +87,8 @@ class Context implements IContext
 	 */
 	public function isTerminate()
 	{
-		return
-			$this->getCurrentState() == EmptyState::getInstance() &&
-			is_null($this->getNextState());
+		$empty = $this->getCurrentState() == EmptyState::getInstance();
+		return $empty && is_null($this->getNextState());
 	}
 
 	/**
@@ -106,15 +105,20 @@ class Context implements IContext
 	 * 構造上、状態の実装次第では無限ループに陥ることがありますので、
 	 * 扱いには十分注意してください。
 	 * 
+	 * @param integer $startCounter 開始カウント。
 	 * @return 状態が終了するまでに要したフェーズの反復実行回数。
 	 */
-	public function loop()
+	public function loop($startCounter = 0)
 	{
-		for ($i = 0; !$this->isTerminate(); $i++)
+		if ($this->isTerminate())
+		{
+			return $startCounter;
+		}
+		else
 		{
 			$this->phase();
+			return $this->loop(++$startCounter);
 		}
-		return $i;
 	}
 
 	/**
