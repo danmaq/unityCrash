@@ -44,7 +44,10 @@ class EnvironmentTest extends TestCaseExtension
 			->and('インスタンスが指定したクラスかそのサブクラスである', 'UnityCrash\Utils\Singleton');
 	}
 
-	/** @scenario クエリを取得でき、置き換えられる */
+	/**
+	 * @scenario クエリを取得でき、置き換えられる
+	 * @depends shouldGetInstance
+	 */
 	public function shouldGetQuery()
 	{
 		$this
@@ -58,7 +61,10 @@ class EnvironmentTest extends TestCaseExtension
 			->then('現在のクエリが取得できている', array());
 	}
 
-	/** @scenario REST URLを取得でき、置き換えられる */
+	/**
+	 * @scenario REST URLを取得でき、置き換えられる
+	 * @depends shouldGetInstance
+	 */
 	public function shouldRestParams()
 	{
 		$this
@@ -71,7 +77,10 @@ class EnvironmentTest extends TestCaseExtension
 			->then('現在のRESTパラメータが取得できている', array());
 	}
 
-	/** @scenario メソッド種別を取得でき、置き換えられる */
+	/**
+	 * @scenario メソッド種別を取得でき、置き換えられる
+	 * @depends shouldGetInstance
+	 */
 	public function shouldGetMethod()
 	{
 		$q = isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET';
@@ -85,7 +94,10 @@ class EnvironmentTest extends TestCaseExtension
 			->then('現在のHTTPメソッドが取得できている', $q);
 	}
 
-	/** @scenario カレントディレクトリを取得でき、置き換えられる */
+	/**
+	 * @scenario カレントディレクトリを取得でき、置き換えられる
+	 * @depends shouldGetInstance
+	 */
 	public function shouldCurrentPath()
 	{
 		$newPath = getcwd() . "/application";

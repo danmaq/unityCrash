@@ -2,7 +2,7 @@
 
 namespace UnityCrash\Utils;
 
-use LogicException;
+use \LogicException;
 use UnityCrash\Data\Message;
 
 /**

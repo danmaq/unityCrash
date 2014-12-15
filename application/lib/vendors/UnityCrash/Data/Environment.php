@@ -2,7 +2,7 @@
 
 namespace UnityCrash\Data;
 
-use InvalidArgumentException;
+use \InvalidArgumentException;
 use UnityCrash\Utils\Singleton;
 
 /**

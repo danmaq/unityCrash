@@ -26,7 +26,9 @@ class ControllerStateTest extends TestCaseExtension
 		parent::__construct();
 		$this->givenTable['インスタンスを取得する'] = array($this, 'getInstance');
 		$this->givenTable['初期状態としてインスタンスを食わせたコンテキストを取得する'] = array($this, 'createContextWithState');
+		$this->whenTable['コンテキストを生成する'] = array($this, 'createContext');
 		$this->whenTable['コンテキストを実行する'] = array($this, 'runPhase');
+		$this->whenTable['teardown を実行する'] = array($this, 'callTeardown');
 		$this->whenTable['REST情報を設定する'] = array($this, 'emulateHTTPRequest');
 		$this->whenTable['次の状態を指定する'] = array($this, 'setNextState');
 		$this->whenTable['カレントディレクトリ値を改変する'] = array($this, 'setCurrentDirectory');
@@ -96,19 +98,17 @@ class ControllerStateTest extends TestCaseExtension
 			->and('次回の状態が正しい', MessageState::getInstance());
 	}
 
-	/** @scenario 状態終了ができる(何もしない) */
-	public function shouldExitState()
+	/** @scenario teardown は何もしない */
+	public function shouldTeardown()
 	{
 		$this
-			->given('初期状態としてインスタンスを食わせたコンテキストを取得する')
-			->when('カレントディレクトリ値を改変する', '/application')
-			->and('コンテキストを実行する')
-			->and('コンテキストを実行する')
-			->and('カレントディレクトリ値を改変する', null)
-			->then('ワークが書き換わらない');
-		// 状態遷移そのものはContextのテストでしているので、ここではテストしない。
+			->given('インスタンスを取得する')
+			->when('コンテキストを生成する')
+			->and('teardown を実行する')
+			->then('ワークが書き換わらない', true)
+			->and('次回の状態が正しい', null);
 	}
-	
+
 	/** インスタンスを取得する */
 	protected function getInstance(array &$world, array $arguments)
 	{
@@ -124,11 +124,23 @@ class ControllerStateTest extends TestCaseExtension
 		$world[self::CONTEXT] = new Context($world[self::INSTANCE]);
 	}
 
+	/** コンテキストを生成する */
+	protected function createContext(array & $world, array $arguments)
+	{
+		$world[self::CONTEXT] = new Context();
+	}
+
 	/** コンテキストを実行する */
 	protected function runPhase(array &$world, array $arguments)
 	{
 		$this->assertInstanceOf('UnityCrash\State\Context', $world[self::CONTEXT], 'コンテキストが存在する');
 		$world[self::CONTEXT]->phase();
+	}
+
+	/** teardown を実行する */
+	protected function callTeardown(array & $world, array $arguments)
+	{
+		$world[self::INSTANCE]->teardown($world[self::CONTEXT]);
 	}
 
 	/** REST情報を設定する */

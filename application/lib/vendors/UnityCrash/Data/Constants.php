@@ -11,6 +11,15 @@ namespace UnityCrash\Data;
 final class Constants
 {
 
+	/** エラーメッセージを含むかどうか。 */
+	const DATA_MESSAGE_ERROR = 'messageIsError';
+
+	/** メッセージID。 */
+	const DATA_MESSAGE_ID = 'messageId';
+
+	/** メッセージ本体。 */
+	const DATA_MESSAGE_BODY = 'messageBody';
+
 	/** エラー表示用 REST エントリ ポイント。 */
 	const REST_ERROR = 'error';
 
