@@ -7,6 +7,7 @@ $loader->register();
 
 use UnityCrash\Data\Environment;
 use UnityCrash\MyState\ControllerState;
+use UnityCrash\MyState\MessageState;
 use UnityCrash\State\Context;
 use UnityCrash\State\EmptyState;
 
@@ -67,7 +68,7 @@ class ControllerStateTest extends TestCaseExtension
 			->then('ワークが書き換わらない')
 			->and('前回の状態が正しい', EmptyState::getInstance())
 			->and('現在の状態が正しい', ControllerState::getInstance())
-			->and('次回の状態が正しい', null);
+			->and('次回の状態が正しい', MessageState::getInstance());
 	}
 
 	/** @scenario 特定の環境の場合、次の状態を選択できる */
@@ -76,20 +77,23 @@ class ControllerStateTest extends TestCaseExtension
 		$this
 			->given('初期状態としてインスタンスを食わせたコンテキストを取得する')
 			->when('REST情報を設定する', 'get', '/error/404')
-			->when('カレントディレクトリ値を改変する', '/application')
-			->and('コンテキストを実行する')
-			->then('ワークが書き換わらない')
-			->and('前回の状態が正しい', EmptyState::getInstance())
-			->and('現在の状態が正しい', ControllerState::getInstance())
-			->and('次回の状態が正しい', null)
-			->when('REST情報を設定する', 'post', '/hoge')
-			->and('次の状態を指定する', null)
+			->and('カレントディレクトリ値を改変する', '/application')
 			->and('コンテキストを実行する')
 			->and('カレントディレクトリ値を改変する', null)
 			->then('ワークが書き換わらない')
 			->and('前回の状態が正しい', EmptyState::getInstance())
 			->and('現在の状態が正しい', ControllerState::getInstance())
-			->and('次回の状態が正しい', null);
+			->and('次回の状態が正しい', MessageState::getInstance());
+		$this
+			->given('初期状態としてインスタンスを食わせたコンテキストを取得する')
+			->when('REST情報を設定する', 'post', '/hoge')
+			->and('カレントディレクトリ値を改変する', '/application')
+			->and('コンテキストを実行する')
+			->and('カレントディレクトリ値を改変する', null)
+			->then('ワークが書き換わらない')
+			->and('前回の状態が正しい', EmptyState::getInstance())
+			->and('現在の状態が正しい', ControllerState::getInstance())
+			->and('次回の状態が正しい', MessageState::getInstance());
 	}
 
 	/** @scenario 状態終了ができる(何もしない) */
@@ -131,10 +135,9 @@ class ControllerStateTest extends TestCaseExtension
 	protected function emulateHTTPRequest(array &$world, array $arguments)
 	{
 		$this->assertEquals(2, count($arguments), '引数は 2 つ必要');
-		$method = $arguments[0];
-		$query = $arguments[1];
-		
-		$this->fail('Not Implements.');
+		$values =
+			array('REQUEST_METHOD' => $arguments[0], 'QUERY_STRING' => "_url={$arguments[1]}");
+		Environment::getInstance()->setValues($values);
 	}
 
 	/** カレントディレクトリ値を改変する */

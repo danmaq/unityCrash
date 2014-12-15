@@ -3,6 +3,7 @@
 namespace UnityCrash\Utils;
 
 use LogicException;
+use UnityCrash\Data\Message;
 
 /**
  * Singleton パターンにおける既定の実装です。
@@ -29,7 +30,7 @@ abstract class Singleton
 	 */
 	final public function __clone()
 	{
-		throw new LogicException('Singleton object must not clone.');
+		throw new LogicException(_('Singleton object must not clone.'));
 	}
 
 	/**

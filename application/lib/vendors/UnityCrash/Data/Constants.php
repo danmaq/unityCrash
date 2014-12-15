@@ -10,4 +10,13 @@ namespace UnityCrash\Data;
  */
 final class Constants
 {
+
+	/** エラー表示用 REST エントリ ポイント。 */
+	const REST_ERROR = 'error';
+
+	/** ビュー用 REST エントリ ポイント。 */
+	const REST_MESSAGE = 'message';
+
+	/** ツイート投稿用 REST エントリ ポイント。 */
+	const REST_TWEET = 'tweet';
 }

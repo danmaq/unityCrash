@@ -91,7 +91,7 @@
 					</header>
 					<section>
 						<form method="post">
-							<xsl:attribute name="action"><xsl:value-of select="@root" />/message</xsl:attribute>
+							<xsl:attribute name="action"><xsl:value-of select="@root" />/tweet</xsl:attribute>
 							<fieldset>
 								<xsl:if test="@message">
 									<p>

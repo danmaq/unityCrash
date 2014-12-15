@@ -126,7 +126,7 @@ final class Environment extends Singleton
 		$result = is_null($path) ? getcwd() : $path;
 		if (!file_exists($result))
 		{
-			$message = "The path does not exist. :{$result}";
+			$message = _("The path does not exist. :{$result}");
 			throw new InvalidArgumentException($message);
 		}
 		$this->_currentDirectory = $result;

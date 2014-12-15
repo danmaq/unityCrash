@@ -18,9 +18,6 @@ use UnityCrash\Utils\Singleton;
 final class ControllerState extends Singleton implements IState
 {
 
-	/** 既定のエントリ ポイント。 */
-	const DEFAULT_ENTRY = 'message';
-
 	/**
 	 * コンテキストにこの状態が適用された直後に呼び出されます。
 	 *
@@ -39,7 +36,7 @@ final class ControllerState extends Singleton implements IState
 	public function phase(IContext $context)
 	{
 		$rest = Environment::getInstance()->getRestParams();
-		$entry = count($rest) === 0 ? self::DEFAULT_ENTRY : $rest[0];
+		$entry = count($rest) === 0 ? Constants::REST_MESSAGE : $rest[0];
 		$context->setNextState(include self::getPath($entry));
 	}
 
@@ -62,7 +59,7 @@ final class ControllerState extends Singleton implements IState
 	{
 		$dir = Environment::getInstance()->getCurrentDirectory();
 		$path = "{$dir}/rest/{$entry}.php";
-		$exists = $entry === self::DEFAULT_ENTRY || file_exists($path);
-		return $exists ? $path : self::getPath(self::DEFAULT_ENTRY);
+		$exists = $entry === Constants::REST_ERROR || file_exists($path);
+		return $exists ? $path : self::getPath(Constants::REST_ERROR);
 	}
 }
