@@ -54,9 +54,9 @@ class ViewStateTest extends TestCaseExtension
 				'dynamic' => true);
 		$expect =
 			array(
-				'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
-				'xsi:noNamespaceSchemaLocation' => 'default.xsd',
-				'xml:lang' => 'en',
+			//	'xmlns:xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
+			//	'xsi:noNamespaceSchemaLocation' => 'default.xsd',
+			//	'xml:lang' => 'en',
 				'query' => 'foo',
 				'result' => 'false',
 				'message' => 'qux',
@@ -84,6 +84,7 @@ class ViewStateTest extends TestCaseExtension
 			$options['result'],
 			$options['dynamic'],
 			$options['xml:lang']);
+		echo $world[self::XML];
 	}
 
 	/** 指定したインスタンスが取得できる */
@@ -101,7 +102,15 @@ class ViewStateTest extends TestCaseExtension
 		$this->assertTrue(isset($world[self::XML]), '文字列自体は生成されている');
 		$dom = new DOMDocument();
 		$this->assertTrue($dom->loadXML($world[self::XML]), 'XML自体は生成されている');
-		
+		$nodes = $dom->getElementsByTagName('body');
+		$this->assertEquals(1, $nodes->length, 'ルート要素は生成されている');
+		$bodyAttr = $nodes->item(0)->attributes;
+		foreach ($arguments[0] as $key => $value)
+		{
+			$attr = $bodyAttr->getNamedItem($key);
+			$this->assertNotNull($attr, $key . '属性は生成されている');
+			$this->assertEquals($value, $attr->nodeValue, $key . '属性の値は生成されている');
+		}
 		// TODO: テストコードここから
 		$this->fail('"生成されたXMLが正しい" is not implemented.');
 	}
