@@ -8,6 +8,7 @@ $loader->register();
 use UnityCrash\Data\Environment;
 use UnityCrash\MyState\ControllerState;
 use UnityCrash\MyState\MessageState;
+use UnityCrash\MyState\TweetState;
 use UnityCrash\State\Context;
 use UnityCrash\State\EmptyState;
 
@@ -71,10 +72,20 @@ class ControllerStateTest extends TestCaseExtension
 			->and('前回の状態が正しい', EmptyState::getInstance())
 			->and('現在の状態が正しい', ControllerState::getInstance())
 			->and('次回の状態が正しい', MessageState::getInstance());
+		$this
+			->given('初期状態としてインスタンスを食わせたコンテキストを取得する')
+			->when('REST情報を設定する', 'get', '/')
+			->and('カレントディレクトリ値を改変する', '/application')
+			->and('コンテキストを実行する')
+			->and('カレントディレクトリ値を改変する', null)
+			->then('ワークが書き換わらない')
+			->and('前回の状態が正しい', EmptyState::getInstance())
+			->and('現在の状態が正しい', ControllerState::getInstance())
+			->and('次回の状態が正しい', MessageState::getInstance());
 	}
 
 	/** @scenario 特定の環境の場合、次の状態を選択できる */
-	public function shouldSelectNextStateAtDesignate()
+	public function shouldSelectNextStateAtDesignateToError()
 	{
 		$this
 			->given('初期状態としてインスタンスを食わせたコンテキストを取得する')
@@ -86,6 +97,11 @@ class ControllerStateTest extends TestCaseExtension
 			->and('前回の状態が正しい', EmptyState::getInstance())
 			->and('現在の状態が正しい', ControllerState::getInstance())
 			->and('次回の状態が正しい', MessageState::getInstance());
+	}
+
+	/** @scenario 特定の環境の場合、次の状態を選択できる */
+	public function shouldSelectNextStateAtDesignateToNotFound()
+	{
 		$this
 			->given('初期状態としてインスタンスを食わせたコンテキストを取得する')
 			->when('REST情報を設定する', 'post', '/hoge')
@@ -96,6 +112,21 @@ class ControllerStateTest extends TestCaseExtension
 			->and('前回の状態が正しい', EmptyState::getInstance())
 			->and('現在の状態が正しい', ControllerState::getInstance())
 			->and('次回の状態が正しい', MessageState::getInstance());
+	}
+
+	/** @scenario 特定の環境の場合、次の状態を選択できる */
+	public function shouldSelectNextStateAtDesignateToTweet()
+	{
+		$this
+			->given('初期状態としてインスタンスを食わせたコンテキストを取得する')
+			->when('REST情報を設定する', 'post', '/tweet')
+			->and('カレントディレクトリ値を改変する', '/application')
+			->and('コンテキストを実行する')
+			->and('カレントディレクトリ値を改変する', null)
+			->then('ワークが書き換わらない')
+			->and('前回の状態が正しい', EmptyState::getInstance())
+			->and('現在の状態が正しい', ControllerState::getInstance())
+			->and('次回の状態が正しい', TweetState::getInstance());
 	}
 
 	/** @scenario teardown は何もしない */

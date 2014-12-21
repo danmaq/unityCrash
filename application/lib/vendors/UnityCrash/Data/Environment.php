@@ -173,7 +173,7 @@ final class Environment
 	{
 		$uri = isset($query[self::URI]) ? $query[self::URI] : '/';
 		$trimmed = preg_replace('/(^\/|\/$)/', '', $uri);
-		$splited = strlen($trimmed) === 0 ? array() : explode('/', $trimmed);
+		$splited = empty($trimmed) ? array() : explode('/', $trimmed);
 		return array_map('self::splitMapper', $splited);
 	}
 

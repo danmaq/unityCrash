@@ -1,2 +1,2 @@
 <?php
-return UnityCrash\MyState\MessageState::getInstance();
+return UnityCrash\MyState\TweetState::getInstance();
