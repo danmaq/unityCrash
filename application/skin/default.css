@@ -1,0 +1,199 @@
+@charset "UTF-8";
+@media all
+{
+	body
+	{
+		background: White url("bg.png") no-repeat fixed right bottom;  
+		color: #333;
+		font-family: "Yu Gothic", "メイリオ", "Meiryo", "Meiryo UI", "Segoe UI", "Segoe WP", "ヒラギノ角ゴ ProN W3", "HiraKakuProN-W3", Osaka, Arial, "ＭＳ Ｐゴシック", sans-serif;
+		letter-spacing: 1px;
+		margin: 0px 10%;
+		min-width: 780px;
+	}
+
+	div.bg
+	{
+		display: none;
+	}
+
+	div.main
+	{
+		/* IE 8 */
+		background-image: url("white.png")\9;
+		/* IE 7 */
+		*background-image: url("white.png");
+		/* IE 6 */
+		_background-image: url("white.png");
+		/* Others */
+		background-color: rgba(255, 255, 255, 0.7);
+	}
+
+	fieldset
+	{
+		/* IE 8 */
+		background-color: #EEEEEE\9;
+		/* IE 7 */
+		*background-color: #EEEEEE;
+		/* IE 6 */
+		_background-color: #EEEEEE;
+		/* Others */
+		background-color: rgba(238, 238, 238, 0.75);
+		border-style: none;
+		font-size: 150%;
+		padding: 1em;
+	}
+
+	h1
+	{
+		background-color: Black;
+		color: Silver;
+		padding: 2em 1em;
+		margin: 0px 0px 1em 0em;
+		text-align: right;
+	}
+
+	h2
+	{
+		border-top: 1px solid Gray;
+		font-weight: lighter;
+		margin: 3em 1em 1ex 1em;
+		padding: 1ex 0px;
+	}
+
+	hr
+	{
+		border: 1px solid Black;
+		margin: 3em 0px 0px 0px;
+	}
+
+	address
+	{
+		background-color: Black;
+		color: Silver;
+		font-style: normal;
+		font-weight: bold;
+		margin: 0px;
+		padding: 1em 2em;
+		text-align: left;
+	}
+
+	address ul
+	{
+		list-style-type: none;
+	}
+
+	p.textfield input[type="text"]
+	{
+		border-style: none;
+		color: Black;
+		font-family: "Yu Gothic", "Segoe UI", "メイリオ", "Meiryo", "Meiryo UI", "Segoe WP", "ヒラギノ角ゴ ProN W3", "HiraKakuProN-W3", Osaka, Arial, "ＭＳ Ｐゴシック", sans-serif;
+		font-size: 120%;
+		font-weight: bolder;
+		width: 100%;
+	}
+
+	input[type="submit"]
+	{
+		background-color: LightGray;
+		color: #333;
+		border-radius: 0px;
+		border-style: none;
+		cursor: pointer;
+		font-size: 120%;
+		font-family: "Yu Gothic", "Segoe UI", "メイリオ", "Meiryo", "Meiryo UI", "Segoe WP", "ヒラギノ角ゴ ProN W3", "HiraKakuProN-W3", Osaka, Arial, "ＭＳ Ｐゴシック", sans-serif;
+		margin: 0px;
+		padding: 1ex 2em;
+		min-height: 90px;
+		transition: all .15s;
+		-webkit-appearance: none;
+	}
+
+	input[type="submit"]:hover
+	{
+		background-color: Gray;
+		color: Black;
+		transition: all .15s;
+	}
+
+	input[type="submit"]:active
+	{
+		background-color: Black;
+		color: White;
+		transition: all .15s;
+	}
+
+	img
+	{
+		display: inline;
+	}
+
+	p.textfield label
+	{
+		display: block;
+	}
+
+	p.textfield
+	{
+		background-color: White;
+		border: solid 2px Gray;
+		cursor: text;
+		padding: 1ex;
+		text-align: right;
+	}
+
+	p.textfield label
+	{
+		color: Silver;
+	}
+
+	p.warn
+	{
+		color: Red;
+		font-weight: bold;
+	}
+
+	p.info
+	{
+		color: Green;
+		font-weight: bold;
+	}
+}
+
+/* for iOS */
+@media screen and (max-device-width: 480px)
+{
+	body
+	{
+		background-color: White;
+		background-image: none;
+		margin: 0px;
+	}
+
+	div.bg
+	{
+		display: block;
+		z-index: -1;
+		background-image: url("bg.png");
+		background-repeat: no-repeat;
+		background-size: 100% auto;
+		position: fixed;
+		width: 512px;
+		height: 512px;
+		margin-top: -128px;
+		margin-left: -128px;
+		top: 50%;
+		left: 50%;
+	}
+
+	address
+	{
+		font-size: 80%;
+		padding: 1em 0px;
+	}
+
+	p.textfield input[type="text"]
+	{
+		width: 95%;
+	}
+
+}

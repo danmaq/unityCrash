@@ -3,7 +3,6 @@
 namespace UnityCrash\Data;
 
 use \InvalidArgumentException;
-use UnityCrash\Utils\Singleton;
 
 /**
  * 環境依存の値、特にクエリやメソッド値をラッピングします。
@@ -11,38 +10,43 @@ use UnityCrash\Utils\Singleton;
  * @package UnityCrash\Data
  * @author Mc at danmaq
  */
-final class Environment extends Singleton
+final class Environment
 {
-	
+
 	/** クエリ文字列に紐づいた連想配列のキー。 */
 	const QUERY = 'QUERY_STRING';
-	
+
 	/** HTTPメソッドに紐づいた連想配列のキー。 */
 	const METHOD = 'REQUEST_METHOD';
-	
+
+	/** PHPファイル本体へのパスに紐づいた連想配列のキー。 */
+	const PHP_PATH = 'PHP_SELF';
+
 	/** RESTパラメータに用いるためのURL。 */
 	const URI = '_url';
 
 	/** Query string. */
-	private $_query;
+	private static $_query;
 
 	/** REST Parameters. */
-	private $_rest;
+	private static $_rest;
 
 	/** HTTP method. */
-	private $_method;
+	private static $_method;
 
 	/** Current directory. */
-	private $_currentDirectory;
+	private static $_currentDirectory;
+
+	/** Path of base. */
+	private static $_basePath;
 
 	/**
-	 * Constructor.
+	 * 初期化します。
 	 */
-	protected function __construct()
+	static function initialize()
 	{
-		parent::__construct();
-		$this->setValues();
-		$this->setCurrentDirectory();
+		self::setValues();
+		self::setCurrentDirectory();
 	}
 
 	/**
@@ -51,12 +55,13 @@ final class Environment extends Singleton
 	 *
 	 * @param array $values 環境変数値を上書きするための連想配列。
 	 */
-	public function setValues(array $values = null)
+	public static function setValues(array $values = null)
 	{
 		$values = is_null($values) ? $_SERVER : $values;
-		$this->_query = self::getQueryFromEnvironment($values);
-		$this->_method = self::getMethodFromEnvironment($values);
-		$this->_rest = self::getRestParamsFromEnvironment($this->getQuery());
+		self::$_query = self::getQueryFromEnvironment($values);
+		self::$_method = self::getMethodFromEnvironment($values);
+		self::$_basePath = self::getBasePathFromEnvironment($values);
+		self::$_rest = self::getRestParamsFromEnvironment(self::getQuery());
 	}
 
 	/**
@@ -64,9 +69,9 @@ final class Environment extends Singleton
 	 *
 	 * @return array クエリ連想配列。
 	 */
-	public function getQuery()
+	public static function getQuery()
 	{
-		return $this->_query;
+		return self::$_query;
 	}
 
 	/**
@@ -74,9 +79,9 @@ final class Environment extends Singleton
 	 *
 	 * @return array RESTパラメータ。
 	 */
-	public function getRestParams()
+	public static function getRestParams()
 	{
-		return $this->_rest;
+		return self::$_rest;
 	}
 
 	/**
@@ -84,9 +89,19 @@ final class Environment extends Singleton
 	 *
 	 * @return string HTTPメソッド。環境変数から取得できなかった場合、GET。
 	 */
-	public function getMethod()
+	public static function getMethod()
 	{
-		return $this->_method;
+		return self::$_method;
+	}
+
+	/**
+	 * 基底パスを取得します。
+	 *
+	 * @return string 基底パス文字列。環境変数から取得できなかった場合、"."。
+	 */
+	public static function getBasePath()
+	{
+		return self::$_basePath;
 	}
 
 	/**
@@ -109,9 +124,9 @@ final class Environment extends Singleton
 	 * @return string カレントディレクトリ。
 	 * setCurrentDirectory メソッドで改変を加えている場合、その値。
 	 */
-	public function getCurrentDirectory()
+	public static function getCurrentDirectory()
 	{
-		return $this->_currentDirectory;
+		return self::$_currentDirectory;
 	}
 
 	/**
@@ -121,7 +136,7 @@ final class Environment extends Singleton
 	 * @param string $path 改変する値。
 	 * @throws InvalidArgumentException 存在しないパスを指定した場合。
 	 */
-	public function setCurrentDirectory($path = null)
+	public static function setCurrentDirectory($path = null)
 	{
 		$result = is_null($path) ? getcwd() : $path;
 		if (!file_exists($result))
@@ -129,7 +144,7 @@ final class Environment extends Singleton
 			$message = _("The path does not exist. :{$result}");
 			throw new InvalidArgumentException($message);
 		}
-		$this->_currentDirectory = $result;
+		self::$_currentDirectory = $result;
 	}
 
 	/**
@@ -161,7 +176,7 @@ final class Environment extends Singleton
 		$splited = strlen($trimmed) === 0 ? array() : explode('/', $trimmed);
 		return array_map('self::splitMapper', $splited);
 	}
-	
+
 	/**
 	 * 配列からカンマ区切り文字列を探し、分割するためのコールバックです。
 	 *
@@ -174,4 +189,19 @@ final class Environment extends Singleton
 		$result = explode(',', $item);
 		return count($result) === 1 ? $result[0] : $result;
 	}
+
+	/**
+	 * 環境変数から基底パスを抽出・取得します。
+	 *
+	 * @param array $params 環境変数値を格納した連想配列。
+	 * @return string 基底パス文字列。環境変数から取得できなかった場合、"."。
+	 */
+	private static function getBasePathFromEnvironment(array $params)
+	{
+		$path = isset($params[self::PHP_PATH]) ? $params[self::PHP_PATH] : '';
+		$info = pathinfo($path);
+		return isset($info['dirname']) ? $info['dirname'] : '.';
+	}
 }
+
+Environment::initialize();

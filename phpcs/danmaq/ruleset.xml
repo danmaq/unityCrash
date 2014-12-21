@@ -5,7 +5,7 @@
 		<!-- BSDオールマンスタイルの字下げを許容する -->
 		<exclude name="PEAR.ControlStructures.ControlSignature" />
 		<!-- クロージャを1行で記述することを許容する -->
-	<!--	<exclude name="PEAR.Sniffs.Whitespace.ScopeClosingBraceSniff" /> -->
+		<exclude name="Squiz.WhiteSpace.ScopeClosingBrace" />
 	</rule>
 	<rule ref="Generic.PHP.LowerCaseKeyword" />
 </ruleset>

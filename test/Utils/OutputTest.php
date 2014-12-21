@@ -5,20 +5,13 @@ require_once 'application/SplClassLoader.php';
 $loader = new SplClassLoader('UnityCrash', 'application/lib/vendors');
 $loader->register();
 
-use \DOMDocument;
-use UnityCrash\Data\Environment;
-use UnityCrash\MyState\ViewState;
-use UnityCrash\State\Context;
-use UnityCrash\State\EmptyState;
+use UnityCrash\Utils\Output;
 
-class ViewStateTest extends TestCaseExtension
+class OutputTest extends TestCaseExtension
 {
 
-	/** コンテキスト オブジェクトに紐づけられたキー。 */
-	const CONTEXT = 'context';
-
-	/** インスタンスと紐づけられるキー。 */
-	const INSTANCE = 'instance';
+	/** ソースに紐づけられたキー。 */
+	const SOURCE = 'source';
 
 	/** XMLに紐づけられたキー。 */
 	const XML = 'xml';
@@ -27,77 +20,66 @@ class ViewStateTest extends TestCaseExtension
 	public function __construct()
 	{
 		parent::__construct();
-		$this->givenTable['インスタンスを取得する'] = array($this, 'getInstance');
+		$this->givenTable['ソースを与える'] = array($this, 'setSource');
 		$this->whenTable['XML生成を実行する'] = array($this, 'createXml');
-		$this->thenTable['指定したインスタンスが取得できる'] = array($this, 'validateInstance');
 		$this->thenTable['生成されたXMLが正しい'] = array($this, 'validateXml');
 		$this->thenTable['生成されたXMLが正しい(名前空間付き検証)'] = array($this, 'validateXmlWithNS');
 	}
 
-	/** @scenario インスタンスを取得できる */
-	public function shouldGetInstance()
+	/** @scenario 最低限オプション指定のXMLを生成できる */
+	public function shouldCreateSimpleXML()
 	{
+		$expectNS =
+			array(
+				 array('http://www.w3.org/2001/XMLSchema-instance', 'noNamespaceSchemaLocation', 'skin/default.xsd'));
 		$this
-			->given('インスタンスを取得する')
-			->then('指定したインスタンスが取得できる', 'UnityCrash\MyState\ViewState')
-			->and('指定したインスタンスが取得できる', 'UnityCrash\State\IState');
+			->given('ソースを与える', array())
+			->when('XML生成を実行する')
+			->then('生成されたXMLが正しい', array())
+			->and('生成されたXMLが正しい(名前空間付き検証)', $expectNS);
 	}
 
 	/** @scenario 全オプション指定のXMLを生成できる */
 	public function shouldCreateFullXML()
 	{
-		$phpunitPath = pathinfo(`which phpunit`);
 		$opt =
 			array(
 				'xml:lang' => 'en',
 				'query' => 'foo',
-				'result' => false,
+				'result' => 'false',
+				'root' => 'hoge',
 				'message' => 'qux',
-				'dynamic' => true);
+				'dynamic' => 'true');
+		$expect =
+			array(
+				'xml:lang' => 'en',
+				'query' => 'foo',
+				'result' => 'false',
+				'root' => 'hoge',
+				'message' => 'qux',
+				'dynamic' => 'true');
 		$expectNS =
 			array(
 				 array(
 					'http://www.w3.org/2001/XMLSchema-instance', 'noNamespaceSchemaLocation', 'skin/default.xsd'));
-		$expect =
-			array(
-				'xml:lang' => 'en',
-				'root' => $phpunitPath['dirname'],
-				'query' => 'foo',
-				'result' => 'false',
-				'message' => 'qux',
-				'dynamic' => 'true');
 		$this
-			->given('インスタンスを取得する')
-			->when('XML生成を実行する', $opt)
+			->given('ソースを与える', $opt)
+			->when('XML生成を実行する')
 			->then('生成されたXMLが正しい', $expect)
 			->and('生成されたXMLが正しい(名前空間付き検証)', $expectNS);
 	}
 
-	/** インスタンスを取得する */
-	protected function getInstance(array & $world, array $arguments)
+	/** ソースを与える */
+	protected function setSource(array & $world, array $arguments)
 	{
-		$world[self::INSTANCE] = ViewState::getInstance();
+		$this->assertEquals(1, count($arguments), '引数は 1 つ必要');
+		$world[self::SOURCE] = $arguments[0];
 	}
 
 	/** XML生成を実行する */
 	protected function createXml(array & $world, array $arguments)
 	{
-		$this->assertEquals(1, count($arguments), '引数は 1 つ必要');
-		$options = $arguments[0];
-		$world[self::XML] = $world[self::INSTANCE]->createXml(
-			$options['message'],
-			$options['query'],
-			$options['result'],
-			$options['dynamic'],
-			$options['xml:lang']);
-	}
-
-	/** 指定したインスタンスが取得できる */
-	protected function validateInstance(array & $world, array $arguments)
-	{
-		$this->assertEquals(1, count($arguments), '引数は 1 つ必要');
-		$this->assertInstanceOf(
-			$arguments[0], $world[self::INSTANCE], 'インスタンスが指定したクラスかそのサブクラスである');
+		$world[self::XML] = Output::createXml($world[self::SOURCE]);
 	}
 
 	/** 生成されたXMLが正しい */
@@ -138,4 +120,5 @@ class ViewStateTest extends TestCaseExtension
 		$this->assertEquals(1, $nodes->length, 'ルート要素は生成されている');
 		return $nodes->item(0)->attributes;
 	}
+
 }

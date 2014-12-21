@@ -91,7 +91,7 @@ final class MessageState extends Singleton implements IState
 		{
 			return $storage[Constants::DATA_MESSAGE_ID];
 		}
-		$rest = Environment::getInstance()->getRestParams();
+		$rest = Environment::getRestParams();
 		if (count($rest) >= 2 && $rest[0] == 'error' && is_numeric($rest[1]))
 		{
 			return intval($rest[1]);

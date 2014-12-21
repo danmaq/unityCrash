@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xml:lang="ja" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+  <xsd:element name="body">
+    <xsd:complexType>
+      <xsd:attribute name="dynamic" type="xsd:boolean" use="optional" default="true" />
+      <xsd:attribute name="result" type="xsd:boolean" use="optional" default="true" />
+      <xsd:attribute name="query" type="xsd:string" use="optional" default="Unity落ちた" />
+      <xsd:attribute name="root" type="xsd:string" use="optional" default="." />
+      <xsd:attribute name="message" type="xsd:string" use="optional" />
+      <!-- TODO: query属性に文字列長制限も付記する -->
+    </xsd:complexType>
+  </xsd:element>
+</xsd:schema>

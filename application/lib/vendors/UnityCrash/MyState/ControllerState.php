@@ -35,7 +35,7 @@ final class ControllerState extends Singleton implements IState
 	 */
 	public function phase(IContext $context)
 	{
-		$rest = Environment::getInstance()->getRestParams();
+		$rest = Environment::getRestParams();
 		$entry = count($rest) === 0 ? Constants::REST_MESSAGE : $rest[0];
 		$context->setNextState(include self::getPath($entry));
 	}
@@ -48,7 +48,7 @@ final class ControllerState extends Singleton implements IState
 	public function teardown(IContext $context)
 	{
 	}
-	
+
 	/**
 	 * RESTパラメータに合わせたパスを取得します。
 	 *
@@ -57,8 +57,8 @@ final class ControllerState extends Singleton implements IState
 	 */
 	private static function getPath($entry)
 	{
-		$dir = Environment::getInstance()->getCurrentDirectory();
-		$path = "{$dir}/rest/{$entry}.php";
+		$cwd = Environment::getCurrentDirectory();
+		$path = "{$cwd}/rest/{$entry}.php";
 		$exists = $entry === Constants::REST_ERROR || file_exists($path);
 		return $exists ? $path : self::getPath(Constants::REST_ERROR);
 	}

@@ -9,7 +9,7 @@ class Context implements IContext
 
 	/** 前回有効だった状態。 */
 	private $_previousState;
-	
+
 	/** 現在の状態。 */
 	private $_currentState;
 

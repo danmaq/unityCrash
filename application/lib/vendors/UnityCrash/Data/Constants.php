@@ -28,4 +28,9 @@ final class Constants
 
 	/** ツイート投稿用 REST エントリ ポイント。 */
 	const REST_TWEET = 'tweet';
+
+	/** Constructor. */
+	private function __construct()
+	{
+	}
 }

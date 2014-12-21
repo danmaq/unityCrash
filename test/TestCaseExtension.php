@@ -62,10 +62,11 @@ abstract class TestCaseExtension extends PHPUnit_Extensions_Story_TestCase
 	 */
 	public function assertException($func, $type = null, $desc = null)
 	{
+		$path = false;
 		try
 		{
 			$func();
-			$this->fail('例外が発生すべき状況で、発生しませんでした。');
+			$path = true;
 		}
 		catch (Exception $e)
 		{
@@ -77,6 +78,10 @@ abstract class TestCaseExtension extends PHPUnit_Extensions_Story_TestCase
 			{
 				$this->assertEquals($desc, $e->getMessage(), '適切な例外の解説文である');
 			}
+		}
+		if ($path)
+		{
+			$this->fail(self::createMessageForAssertException($type, $desc));
 		}
 	}
 	
@@ -98,5 +103,27 @@ abstract class TestCaseExtension extends PHPUnit_Extensions_Story_TestCase
 		{
 			$this->notImplemented($action);
 		}
+	}
+	
+	/**
+	 * 例外が発生すべき状況で、しなかった場合のメッセージを生成・取得します。
+	 *
+	 * @param string $type 想定する例外の型。
+	 * @param string $desc 想定する例外のメッセージ。
+	 * @return string メッセージ。
+	 */
+	private static function createMessageForAssertException(
+		$type = null, $desc = null)
+	{
+		$message = '例外が発生すべき状況で、発生しませんでした。';
+		if ($type != null)
+		{
+			$message = "$type {$message}";
+		}
+		if ($desc != null)
+		{
+			$message .= "\n含まれているべき解説: $desc";
+		}
+		return $message;
 	}
 }

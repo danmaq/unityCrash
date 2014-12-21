@@ -150,7 +150,7 @@ class MessageStateTest extends TestCaseExtension
 		$this->assertEquals(2, count($arguments), '引数は 2 つ必要');
 		$values =
 			array('REQUEST_METHOD' => $arguments[0], 'QUERY_STRING' => "_url={$arguments[1]}");
-		Environment::getInstance()->setValues($values);
+		Environment::setValues($values);
 	}
 
 	/** コンテキストを生成する */
@@ -174,7 +174,7 @@ class MessageStateTest extends TestCaseExtension
 	/** 環境設定をリセットする */
 	protected function resetParams(array & $world, array $arguments)
 	{
-		Environment::getInstance()->setValues();
+		Environment::setValues();
 	}
 
 	/** コンテキストに情報を設定する */

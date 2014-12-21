@@ -149,14 +149,14 @@ class ControllerStateTest extends TestCaseExtension
 		$this->assertEquals(2, count($arguments), '引数は 2 つ必要');
 		$values =
 			array('REQUEST_METHOD' => $arguments[0], 'QUERY_STRING' => "_url={$arguments[1]}");
-		Environment::getInstance()->setValues($values);
+		Environment::setValues($values);
 	}
 
 	/** カレントディレクトリ値を改変する */
 	protected function setCurrentDirectory(array &$world, array $arguments)
 	{
 		$this->assertEquals(1, count($arguments), '引数は 1 つ必要');
-		Environment::getInstance()->setCurrentDirectory(getcwd() . $arguments[0]);
+		Environment::setCurrentDirectory(getcwd() . $arguments[0]);
 	}
 
 	/** 次の状態を指定する */
