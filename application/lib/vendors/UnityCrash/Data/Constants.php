@@ -10,6 +10,8 @@ namespace UnityCrash\Data;
  */
 final class Constants
 {
+	/** 既定の文字エンコード。 */
+	const ENCODING = 'UTF-8';
 
 	/** エラーメッセージを含むかどうか。 */
 	const DATA_MESSAGE_ERROR = 'messageIsError';

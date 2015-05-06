@@ -13,6 +13,7 @@ use \InvalidArgumentException;
  */
 final class Post
 {
+
 	/** 最大文字数。 */
 	const LIMIT = 140;
 
@@ -22,6 +23,9 @@ final class Post
 	/** メッセージ。 */
 	private $_message;
 
+	/** 置換される文字列の文字列長。 */
+	private static $_replaceLength;
+
 	/**
 	 * Constructor. 
 	 *
@@ -29,6 +33,7 @@ final class Post
 	 */
 	public function __construct($message = null)
 	{
+		self::$_replaceLength = mb_strlen(self::REPLACE, Constants::ENCODING);
 		$this->_message = self::omit($message);
 	}
 
@@ -53,15 +58,36 @@ final class Post
 	 */
 	public function addMessage($message, $force = false)
 	{
-		$noSource = mb_strlen($this->_message, 'UTF-8') == 0;
-		$combined = $noSource ? $message : "{$this->_message} {$message}";
-		$this->_message = self::omit($combined);
+		$previous = $this->getMessage();
+		$newbie = mb_strlen($previous, Constants::ENCODING) === 0;
+		if ($force and !$newbie)
+		{
+			$insert = self::omit($message);
+			$amount = self::LIMIT - mb_strlen($insert, Constants::ENCODING);
+			if ($amount >= self::$_replaceLength)
+			{
+				$omittedPrev = self::omit($previous, $amount);
+				$this->_message = "{$previous} {$insert}";
+			}
+			else
+			{
+				$this->_message = $insert;
+			}
+		}
+		else
+		{
+			$combined = "{$previous} {$message}";
+			$this->_message = self::omit($newbie ? $message : $combined);
+		}
 	}
 
 	/**
 	 * メッセージを短縮します。
+	 * ソースが null である場合、空文字となります。
+	 * ソースが文字数制限以下の場合、そのまま取得します。
+	 * ソースが文字数制限を超える場合、短縮記号を含み文字列を短縮します。
 	 *
-	 * @param string $message メッセージ。
+	 * @param string $message ソースとなるメッセージ。
 	 * @param integer $limit 文字数制限。
 	 * @return string メッセージ。
 	 * @throws \InvalidArgumentException 文字数制限が短縮記号よりも小さい場合。
@@ -69,14 +95,13 @@ final class Post
 	 */
 	public static function omit($message, $limit = self::LIMIT)
 	{
-		$encode = 'UTF-8';
-		$max = $limit - mb_strlen(self::REPLACE, $encode);
+		$max = $limit - self::$_replaceLength;
 		if ($max < 0)
 		{
 			throw new InvalidArgumentException('Character limit is too short.');
 		}
 		$msg = isset($message) ? $message : '';
-		$omit = mb_strlen($msg, $encode) > $limit;
-		return $omit ? mb_substr($msg, 0, $max, $encode) . self::REPLACE: $msg;
+		$omit = mb_strlen($msg, Constants::ENCODING) > $limit;
+		return $omit ? mb_substr($msg, 0, $max, Constants::ENCODING) . self::REPLACE: $msg;
 	}
 }
